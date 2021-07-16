@@ -1,11 +1,11 @@
-name: Open-source-version-offline-packaging
+name: build-release-offlice-package
 
 on:
   workflow_dispatch:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
 

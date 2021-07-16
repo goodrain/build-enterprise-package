@@ -10,7 +10,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Pack offline packages
-        run: chmod +x ./release_offline_package.sh && RBD_VER=v5.3.1-release  ./release_offline_package.sh
+        run: chmod +x ./release_offline_package.sh &&  ./release_offline_package.sh
         
       - name: Setup aliyun oss
         uses: manyuanrong/setup-ossutil@master

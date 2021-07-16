@@ -37,7 +37,6 @@ registry.cn-hangzhou.aliyuncs.com/goodrain/hyperkube:v1.19.6-rke
 registry.cn-hangzhou.aliyuncs.com/goodrain/coreos-flannel:v0.13.0-rke
 registry.cn-hangzhou.aliyuncs.com/goodrain/flannel-cni:v0.3.0-rke
 registry.cn-hangzhou.aliyuncs.com/goodrain/pause:3.2
-registry.cn-hangzhou.aliyuncs.com/goodrain/metrics-server:v0.3.6
 rancher/k8s-dns-kube-dns:1.15.10
 rancher/k8s-dns-dnsmasq-nanny:1.15.10
 rancher/k8s-dns-sidecar:1.15.10
@@ -146,7 +145,7 @@ function main(){
     # get offline install rainbond script
     get_offline_script
 
-    tar zcvf rainbond-offline-$RBD_VER-`date "+%m%d"`.tgz  offline/*
+    tar zcvf rainbond-offline-$RBD_VER.tgz  offline/*
 
 }
 

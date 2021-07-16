@@ -13,7 +13,7 @@ jobs:
         run: echo "${{ secrets.HUB_PASSWD }}" | docker login image.goodrain.com -u ${{ secrets.HUB_USER }} --password-stdin
 
       - name:  Pack offline packages
-        run: chmod +x ./enterprise_offline_package.sh && RBD_VER=enterprise-2106 ./enterprise_offline_package.sh
+        run: chmod +x ./enterprise_offline_package.sh && ./enterprise_offline_package.sh
         
       - name: Setup aliyun oss
         uses: manyuanrong/setup-ossutil@master

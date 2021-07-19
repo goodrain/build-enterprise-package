@@ -7,5 +7,5 @@
 - 使用 [GitHub Actions](https://github.com/goodrain/build-offlice-package/actions/workflows/release-offline-package.yml) 进行打包,打包完成会自动推送至OSS。
 
 
-开源版oss包地址：oss://rainbond-pkg/offline/5.3/
+开源版oss包地址：oss://rainbond-pkg/offline/5.3/         
 企业版oss包地址：oss://rainbond-pkg/offline/5.3-enterprise/

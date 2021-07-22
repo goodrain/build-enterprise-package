@@ -1,6 +1,9 @@
 # build-offlice-package
 构建Rainbond离线安装包
 
+[![build-release-offlice-package](https://github.com/goodrain/build-offlice-package/actions/workflows/release-offline-package.yml/badge.svg)](https://github.com/goodrain/build-offlice-package/actions/workflows/release-offline-package.yml)
+[![build-enterprise-offlice-package](https://github.com/goodrain/build-offlice-package/actions/workflows/enterprise-offline-package.yml/badge.svg)](https://github.com/goodrain/build-offlice-package/actions/workflows/enterprise-offline-package.yml)
+
 ### 打包方式
 
 - 通过修改脚本中 `RBD_VER=enterprise-2106` 环境变量值变更版本

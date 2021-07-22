@@ -119,6 +119,7 @@ function get_docker() {
 
 }
 
+
 function get_offline_script(){
 
     wget sh.rainbond.com/install_docker_offline.sh && mv install_docker_offline.sh ./offline/install_docker_offline.sh && chmod +x ./offline/install_docker_offline.sh
@@ -126,6 +127,13 @@ function get_offline_script(){
     wget https://rainbond-script.oss-cn-hangzhou.aliyuncs.com/init_node_offline.sh && mv init_node_offline.sh ./offline/init_node_offline.sh && chmod +x ./offline/init_node_offline.sh
 
     wget https://grstatic.oss-cn-shanghai.aliyuncs.com/binary/kubectl -O ./offline/kubectl && chmod +x ./offline/kubectl
+
+}
+
+function get_license(){
+
+
+    wget https://rainbond-pkg.oss-cn-shanghai.aliyuncs.com/offline/5.3-enterprise/license -O ./offline/license && chmod +x ./offline/license
 
 }
 
@@ -145,7 +153,9 @@ function main(){
     get_docker
     # get offline install rainbond script
     get_offline_script
-
+    # get license binary command
+    get_license
+    
     tar zcvf rainbond-offline-$RBD_VER.tgz  offline/*
 
 }

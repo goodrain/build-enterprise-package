@@ -2,7 +2,7 @@
 
 export NFSCLI_URL="https://rainbond-pkg.oss-cn-shanghai.aliyuncs.com/offline/nfs-client/nfs_all.tar.gz"
 export DOCKER_VER=19.03.5
-export RBD_VER=v5.3.1-release
+RBD_VER=${RBD_VER:-'v5.3.1-release'}
 
 
 function get_nfscli() {

@@ -12,7 +12,9 @@ jobs:
       - name: Log in to the mirror repository
         run: echo "${{ secrets.HUB_PASSWD }}" | docker login image.goodrain.com -u ${{ secrets.HUB_USER }} --password-stdin
 
-      - name:  Pack offline packages
+      - name: Pack offline packages
+        env:
+          RBD_VER: v5.3.1-release
         run: chmod +x ./enterprise_offline_package.sh && ./enterprise_offline_package.sh
         
       - name: Setup aliyun oss

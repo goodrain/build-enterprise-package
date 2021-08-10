@@ -130,13 +130,6 @@ function get_offline_script(){
 
 }
 
-function get_license(){
-
-
-    wget https://rainbond-pkg.oss-cn-shanghai.aliyuncs.com/offline/5.3-enterprise/license -O ./offline/license && chmod +x ./offline/license
-
-}
-
 
 function main(){
 
@@ -153,8 +146,6 @@ function main(){
     get_docker
     # get offline install rainbond script
     get_offline_script
-    # get license binary command
-    get_license
     
     tar zcvf rainbond-offline-$RBD_VER.tgz  offline/*
 

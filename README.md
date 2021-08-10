@@ -13,11 +13,11 @@
 
 ## 目录
 
-* [Rainbond企业版编译](#一.Rainbond企业版编译)
-* [构建Rainbond离线安装包](#二.构建Rainbond离线安装包)
-* [Rainbond企业版安装](#三.Rainbond企业版安装)
+* [Rainbond企业版编译](#Rainbond企业版编译)
+* [构建Rainbond离线安装包](#构建Rainbond离线安装包)
+* [Rainbond企业版安装](#Rainbond企业版安装)
 
-### 一.Rainbond企业版编译
+### Rainbond企业版编译
 
 
 - 分别编译 `allinone` 及数据中心镜像。
@@ -25,7 +25,7 @@
 - 使用 GitHub Actions 进行编译,编译完成会自动推送镜像。
     
 
-### 二.构建Rainbond离线安装包
+### 构建Rainbond离线安装包
 
 - 包括开源版及企业版离线安装包打包。
 - 通过修改 `workflows` 文件中 `env.RBD_VER` 环境变量值变更版本。
@@ -34,7 +34,7 @@
     开源版oss包地址：oss://rainbond-pkg/offline/5.3/         
     企业版oss包地址：oss://rainbond-pkg/offline/5.3-enterprise/
 
-### 三.Rainbond企业版安装
+### Rainbond企业版安装
 
 > Rainbond v5.3企业版离线部署文档
 

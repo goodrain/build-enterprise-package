@@ -13,9 +13,9 @@
 
 ## 目录
 
-* [Rainbond企业版编译](#Rainbond企业版编译)
-* [构建Rainbond离线安装包](#构建Rainbond离线安装包)
-* [Rainbond企业版安装](#Rainbond企业版安装)
+* [Rainbond企业版编译](#一、Rainbond企业版编译)
+* [构建Rainbond离线安装包](#二、构建Rainbond离线安装包)
+* [Rainbond企业版安装](#三、Rainbond企业版安装)
 
 ### 一、Rainbond企业版编译
 

@@ -6,6 +6,8 @@
 [![build-release-offlice-package](https://github.com/goodrain/build-offlice-package/actions/workflows/release-offline-package.yml/badge.svg)](https://github.com/goodrain/build-offlice-package/actions/workflows/release-offline-package.yml)
 [![build-enterprise-offlice-package](https://github.com/goodrain/build-offlice-package/actions/workflows/enterprise-offline-package.yml/badge.svg)](https://github.com/goodrain/build-offlice-package/actions/workflows/enterprise-offline-package.yml)
 
+## 功能列表
+
 1. Rainbond企业版编译
 2. 构建Rainbond离线安装包
 
@@ -15,7 +17,7 @@
 * [构建Rainbond离线安装包](#构建Rainbond离线安装包)
 * [Rainbond企业版安装](#Rainbond企业版安装)
 
-### Rainbond企业版编译
+### 一、Rainbond企业版编译
 
 
 - 分别编译 `allinone` 及数据中心镜像。
@@ -23,7 +25,7 @@
 - 使用 GitHub Actions 进行编译,编译完成会自动推送镜像。
     
 
-### 构建Rainbond离线安装包
+### 二、构建Rainbond离线安装包
 
 - 包括开源版及企业版离线安装包打包。
 - 通过修改 `workflows` 文件中 `env.RBD_VER` 环境变量值变更版本。
@@ -32,11 +34,11 @@
     开源版oss包地址：oss://rainbond-pkg/offline/5.3/         
     企业版oss包地址：oss://rainbond-pkg/offline/5.3-enterprise/
 
-### Rainbond企业版安装
+### 三、Rainbond企业版安装
 
 > Rainbond v5.3企业版离线部署文档
 
-### 前提条件
+**前提条件**
 
 - 如果开启了防⽕墙，确保开通了 80, 443, 6060,6443, 7070, 8443 端⼝；
 - 设置服务器时区为 `Asia/Shanghai` ，并同步时间；
@@ -47,7 +49,7 @@ wget https://goodrain-delivery.oss-cn-hangzhou.aliyuncs.com/zhangz/kernel_upgrad
 ```
 - 将生成的控制台license文件放到~/license目录（license签发参考文档https://rainbond.coding.net/p/delivery/wiki/377）
 
-### 安装步骤
+**安装步骤**
 
 #### 下载并解压离线安装包
 

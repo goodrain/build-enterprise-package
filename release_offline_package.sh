@@ -10,7 +10,7 @@ function get_nfscli() {
         echo "[INFO] nfs binaries already existed"
     else
         wget -c "$NFSCLI_URL" || {
-            echo "[ERROR] downloading docker failed"
+            echo "[ERROR] Downloading nfs binaries failed"
             exit 1
         }
         mv nfs_all.tar.gz ./offline/nfs_all.tar.gz
@@ -20,7 +20,56 @@ function get_nfscli() {
 
 function get_kernel() {
 
-    wget https://rainbond-pkg.oss-cn-shanghai.aliyuncs.com/offline/yum/kernel-ml-5.12.12-1.el7.elrepo.x86_64.rpm && mv kernel-ml-5.12.12-1.el7.elrepo.x86_64.rpm ./offline/kernel-ml-5.12.12-1.el7.elrepo.x86_64.rpm
+    KERNEL_URL="https://rainbond-pkg.oss-cn-shanghai.aliyuncs.com/offline/os-kernel/kernel-lt-5.4.130-1.el7.elrepo.x86_64.rpm"
+    if [[ -f "./offline/kernel-lt-5.4.130-1.el7.elrepo.x86_64.rpm" ]]; then
+        echo "[INFO] Kernel upgrade package already existed"
+    else
+        wget -c "$KERNEL_URL" || {
+            echo "[ERROR] Downloading kernel upgrade package failed"
+            exit 1
+        }
+        mv kernel-lt-5.4.130-1.el7.elrepo.x86_64.rpm ./offline/kernel-lt-5.4.130-1.el7.elrepo.x86_64.rpm
+    fi
+
+}
+
+function get_docker() {
+
+    DOCKER_URL="https://rainbond-pkg.oss-cn-shanghai.aliyuncs.com/offline/docker/docker-${DOCKER_VER}.tgz"
+    if [[ -f "/opt/docker/down/docker-${DOCKER_VER}.tgz" ]]; then
+        echo "[INFO] docker binaries already existed"
+    else
+        echo -e "[INFO] \033[33mdownloading docker binaries\033[0m $DOCKER_VER"
+        wget -c "$DOCKER_URL" || {
+            echo "[ERROR] downloading docker failed"
+            exit 1
+        }
+        mv ./docker-${DOCKER_VER}.tgz ./offline/docker-${DOCKER_VER}.tgz
+    fi
+
+}
+
+function get_offline_script() {
+
+
+    wget sh.rainbond.com/install_docker_offline.sh -O ./offline/install_docker_offline.sh || "echo "[ERROR] Failed to download offline script" && exit 1" && chmod +x ./offline/install_docker_offline.sh
+
+    wget https://rainbond-script.oss-cn-hangzhou.aliyuncs.com/init_node_offline.sh -O ./offline/init_node_offline.sh || "echo "[ERROR] Failed to download offline script" && exit 1" && chmod +x ./offline/init_node_offline.sh
+
+}
+
+function get_command_line_tools() {
+
+    TOOLS_URL="https://grstatic.oss-cn-shanghai.aliyuncs.com/binary/kubectl"
+    if [[ -f "./offline/kubectl" ]]; then
+        echo "[INFO] command line tools already existed"
+    else
+        wget $TOOLS_URL -O ./offline/kubectl || {
+            echo "[ERROR] downloading command line tools failed"
+            exit 1
+        }
+        chmod +x ./offline/kubectl
+    fi 
 
 }
 
@@ -49,9 +98,9 @@ EOF
         if [[ -f "./offline/k8s_image/${k8s_image_tar}.tgz" ]]; then
             echo "[INFO] ${k8s_image_tar} image already existed"
         else
-            docker pull ${k8s_image_name} &&
-                docker tag ${k8s_image_name} goodrain.me/${k8s_offline_image} &&
-                docker save goodrain.me/${k8s_offline_image} -o ./offline/k8s_image/${k8s_offline_image}.tgz
+            docker pull ${k8s_image_name} ||  exit 1
+            docker tag ${k8s_image_name} goodrain.me/${k8s_offline_image}
+            docker save goodrain.me/${k8s_offline_image} -o ./offline/k8s_image/${k8s_offline_image}.tgz
         fi
     done <./offline/k8s_image/list.txt
 
@@ -94,37 +143,11 @@ EOF
         if [[ -f "./offline/rbd_image/${rbd_image_tar}.tgz" ]]; then
             echo "[INFO] ${rbd_image_tar} image already existed"
         else
-            docker pull ${rbd_image_name} &&
-                docker tag ${rbd_image_name} goodrain.me/${rbd_offline_image} &&
-                docker save goodrain.me/${rbd_offline_image} -o ./offline/rbd_image/${rbd_offline_image}.tgz
+            docker pull ${rbd_image_name} || exit 1
+            docker tag ${rbd_image_name} goodrain.me/${rbd_offline_image}
+            docker save goodrain.me/${rbd_offline_image} -o ./offline/rbd_image/${rbd_offline_image}.tgz
         fi
     done <./offline/rbd_image/list.txt
-
-}
-
-function get_docker() {
-
-    DOCKER_URL="https://rainbond-pkg.oss-cn-shanghai.aliyuncs.com/offline/docker/docker-${DOCKER_VER}.tgz"
-    if [[ -f "/opt/docker/down/docker-${DOCKER_VER}.tgz" ]]; then
-        echo "[INFO] docker binaries already existed"
-    else
-        echo -e "[INFO] \033[33mdownloading docker binaries\033[0m $DOCKER_VER"
-        wget -c "$DOCKER_URL" || {
-            echo "[ERROR] downloading docker failed"
-            exit 1
-        }
-        mv ./docker-${DOCKER_VER}.tgz ./offline/docker-${DOCKER_VER}.tgz
-    fi
-
-}
-
-function get_offline_script() {
-
-    wget sh.rainbond.com/install_docker_offline.sh && mv install_docker_offline.sh ./offline/install_docker_offline.sh && chmod +x ./offline/install_docker_offline.sh
-
-    wget https://rainbond-script.oss-cn-hangzhou.aliyuncs.com/init_node_offline.sh && mv init_node_offline.sh ./offline/init_node_offline.sh && chmod +x ./offline/init_node_offline.sh
-
-    wget https://grstatic.oss-cn-shanghai.aliyuncs.com/binary/kubectl -O ./offline/kubectl && chmod +x ./offline/kubectl
 
 }
 
@@ -133,16 +156,18 @@ function main() {
     mkdir -p ./offline ./offline/k8s_image ./offline/rbd_image
     # get nfs client package
     get_nfscli
-    # get centos kernel
+    # get os kernel
     get_kernel
-    # get kubernetes image
-    get_k8s_images
-    # get rainbond image
-    get_rbd_images
     # get docker package
     get_docker
     # get offline install rainbond script
     get_offline_script
+    # Get command line tools
+    get_command_line_tools
+    # get kubernetes image
+    get_k8s_images
+    # get rainbond image
+    get_rbd_images
 
     tar zcvf rainbond-offline-$RBD_VER.tgz offline/*
 

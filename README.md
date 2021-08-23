@@ -1,15 +1,17 @@
 # build-offlice-package
 
-[![ci-allinone-enterprise-build](https://github.com/goodrain/build-offlice-package/actions/workflows/ci-allinone-enterprise.yml/badge.svg)](https://github.com/goodrain/build-offlice-package/actions/workflows/ci-allinone-enterprise.yml)
-[![ci-region-enterprise-build](https://github.com/goodrain/build-offlice-package/actions/workflows/ci-region-enterprise.yml/badge.svg)](https://github.com/goodrain/build-offlice-package/actions/workflows/ci-region-enterprise.yml)
-
-[![build-release-offlice-package](https://github.com/goodrain/build-offlice-package/actions/workflows/release-offline-package.yml/badge.svg)](https://github.com/goodrain/build-offlice-package/actions/workflows/release-offline-package.yml)
-[![build-enterprise-offlice-package](https://github.com/goodrain/build-offlice-package/actions/workflows/enterprise-offline-package.yml/badge.svg)](https://github.com/goodrain/build-offlice-package/actions/workflows/enterprise-offline-package.yml)
 
 ## 功能列表
 
-1. Rainbond企业版编译
-2. 构建Rainbond离线安装包
+1.Rainbond企业版编译
+
+[![ci-allinone-enterprise-build](https://github.com/goodrain/build-offlice-package/actions/workflows/ci-allinone-enterprise.yml/badge.svg)](https://github.com/goodrain/build-offlice-package/actions/workflows/ci-allinone-enterprise.yml)
+[![ci-region-enterprise-build](https://github.com/goodrain/build-offlice-package/actions/workflows/ci-region-enterprise.yml/badge.svg)](https://github.com/goodrain/build-offlice-package/actions/workflows/ci-region-enterprise.yml)
+
+2.构建Rainbond离线安装包
+
+[![build-release-offlice-package](https://github.com/goodrain/build-offlice-package/actions/workflows/release-offline-package.yml/badge.svg)](https://github.com/goodrain/build-offlice-package/actions/workflows/release-offline-package.yml)
+[![build-enterprise-offlice-package](https://github.com/goodrain/build-offlice-package/actions/workflows/enterprise-offline-package.yml/badge.svg)](https://github.com/goodrain/build-offlice-package/actions/workflows/enterprise-offline-package.yml)
 
 ## 目录
 

@@ -22,7 +22,7 @@ jobs:
           DOMESTIC_DOCKER_PASSWORD: ${{ secrets.DOMESTIC_DOCKER_PASSWORD }}
           DOMESTIC_DOCKER_USERNAME: ${{ secrets.DOMESTIC_DOCKER_USERNAME }}
         run: |
-          git clone -b enterprise-2107-depend-err https://${{ secrets.GITLAB_USER }}:"${{ secrets.GITLAB_PASSWORD }}"@git.goodrain.com/goodrain/rainbond-ui-cloud.git
+          git clone -b enterprise-2107 https://${{ secrets.GITLAB_USER }}:"${{ secrets.GITLAB_PASSWORD }}"@git.goodrain.com/goodrain/rainbond-ui-cloud.git
           cd rainbond-ui-cloud
           chmod +x ./build.sh
           ./build.sh

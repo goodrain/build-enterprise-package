@@ -14,7 +14,7 @@ jobs:
         
       - name: Pull code and Build ui image
         env:
-          VERSION: enterprise-2108
+          VERSION: enterprise-2107-0906
           ALLINONE: true
           TRAVIS_PULL_REQUEST: false
           DOMESTIC_BASE_NAME: image.goodrain.com
@@ -22,7 +22,7 @@ jobs:
           DOMESTIC_DOCKER_PASSWORD: ${{ secrets.DOMESTIC_DOCKER_PASSWORD }}
           DOMESTIC_DOCKER_USERNAME: ${{ secrets.DOMESTIC_DOCKER_USERNAME }}
         run: |
-          git clone -b enterprise-5.3 https://${{ secrets.GITLAB_USER }}:"${{ secrets.GITLAB_PASSWORD }}"@git.goodrain.com/goodrain/rainbond-ui-cloud.git
+          git clone -b enterprise-2107-depend-err https://${{ secrets.GITLAB_USER }}:"${{ secrets.GITLAB_PASSWORD }}"@git.goodrain.com/goodrain/rainbond-ui-cloud.git
           cd rainbond-ui-cloud
           chmod +x ./build.sh
           ./build.sh
@@ -48,14 +48,14 @@ jobs:
         
       - name: Pull code and Build allinone image
         env:
-          VERSION: enterprise-2108
+          VERSION: enterprise-2107-0906
           TRAVIS_PULL_REQUEST: false
           DOMESTIC_BASE_NAME: image.goodrain.com
           DOMESTIC_NAMESPACE: ""
           DOMESTIC_DOCKER_PASSWORD: ${{ secrets.DOMESTIC_DOCKER_PASSWORD }}
           DOMESTIC_DOCKER_USERNAME: ${{ secrets.DOMESTIC_DOCKER_USERNAME }}
         run: |
-          git clone -b enterprise-5.3 https://${{ secrets.GITLAB_USER }}:"${{ secrets.GITLAB_PASSWORD }}"@git.goodrain.com/goodrain/rainbond-console-cloud.git
+          git clone -b enterprise-2107-depend-err https://${{ secrets.GITLAB_USER }}:"${{ secrets.GITLAB_PASSWORD }}"@git.goodrain.com/goodrain/rainbond-console-cloud.git
           cd rainbond-console-cloud
           chmod +x  ./release.sh
           ./release.sh allinone

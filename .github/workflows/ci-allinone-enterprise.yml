@@ -21,10 +21,10 @@ jobs:
           BUILD_IMAGE_BASE_NAME: image.goodrain.com
           DOMESTIC_DOCKER_PASSWORD: ${{ secrets.DOMESTIC_DOCKER_PASSWORD }}
           DOMESTIC_DOCKER_USERNAME: ${{ secrets.DOMESTIC_DOCKER_USERNAME }}
+          ROUTE_MODE: history
         run: |
           git clone -b enterprise-5.3 https://${{ secrets.GITLAB_USER }}:"${{ secrets.GITLAB_PASSWORD }}"@git.goodrain.com/goodrain/rainbond-ui-cloud.git
           cd rainbond-ui-cloud
-          export ROUTE_MODE=history
           chmod +x ./build.sh
           ./build.sh
 

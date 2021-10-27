@@ -22,7 +22,7 @@ jobs:
           DOMESTIC_DOCKER_PASSWORD: ${{ secrets.DOMESTIC_DOCKER_PASSWORD }}
           DOMESTIC_DOCKER_USERNAME: ${{ secrets.DOMESTIC_DOCKER_USERNAME }}
         run: |
-          git clone -b 2110 https://${{ secrets.GITLAB_USER }}:"${{ secrets.GITLAB_PASSWORD }}"@git.goodrain.com/goodrain/rainbond-ui-cloud.git
+          git clone -b enterprise-2110 https://${{ secrets.GITLAB_USER }}:"${{ secrets.GITLAB_PASSWORD }}"@git.goodrain.com/goodrain/rainbond-ui-cloud.git
           cd rainbond-ui-cloud
           chmod +x ./build.sh
           ./build.sh
@@ -55,7 +55,7 @@ jobs:
           DOMESTIC_DOCKER_PASSWORD: ${{ secrets.DOMESTIC_DOCKER_PASSWORD }}
           DOMESTIC_DOCKER_USERNAME: ${{ secrets.DOMESTIC_DOCKER_USERNAME }}
         run: |
-          git clone -b enterprise-2107-fixbug https://${{ secrets.GITLAB_USER }}:"${{ secrets.GITLAB_PASSWORD }}"@git.goodrain.com/yangk/rainbond-console-cloud.git
+          git clone -b enterprise-2110 https://${{ secrets.GITLAB_USER }}:"${{ secrets.GITLAB_PASSWORD }}"@git.goodrain.com/goodrain/rainbond-console-cloud.git
           cd rainbond-console-cloud
           chmod +x  ./release.sh
           ./release.sh allinone

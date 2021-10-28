@@ -123,8 +123,8 @@ image.goodrain.com/rbd-monitor:$RBD_VER
 image.goodrain.com/rbd-mesh-data-panel:$RBD_VER
 image.goodrain.com/rbd-init-probe:$RBD_VER
 image.goodrain.com/rbd-grctl:$RBD_VER
-registry.cn-hangzhou.aliyuncs.com/goodrain/builder:v5.3.3
-registry.cn-hangzhou.aliyuncs.com/goodrain/runner:v5.3.3
+registry.cn-hangzhou.aliyuncs.com/goodrain/builder:v5.3.0
+registry.cn-hangzhou.aliyuncs.com/goodrain/runner:v5.3.0
 registry.cn-hangzhou.aliyuncs.com/goodrain/rainbond-operator:v2.0.1
 registry.cn-hangzhou.aliyuncs.com/goodrain/plugins-tcm:5.1.7
 registry.cn-hangzhou.aliyuncs.com/goodrain/kubernetes-dashboard:v2.0.1-3

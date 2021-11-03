@@ -11,7 +11,7 @@ jobs:
 
       - name: Pack offline packages
         env:
-          RBD_VER: v5.4.0-release
+          RBD_VER: v5.4.1-release
         run: chmod +x ./release_offline_package.sh &&  ./release_offline_package.sh
         
       - name: Setup aliyun oss

@@ -11,7 +11,7 @@ jobs:
 
       - name: Pack offline packages
         env:
-          RBD_VER: v5.3.3-release
+          RBD_VER: v5.4.1-release
         run: chmod +x ./release_offline_package.sh &&  ./release_offline_package.sh
         
       - name: Setup aliyun oss
@@ -22,4 +22,4 @@ jobs:
           access-key-secret: ${{ secrets.OSS_ACCESS_KEY_SECRET }}
           
       - name: Push to OSS
-        run: ossutil cp -rf rainbond-offline-*.tgz oss://rainbond-pkg/offline/5.3/
+        run: ossutil cp -rf rainbond-offline-*.tgz oss://rainbond-pkg/offline/5.4/

@@ -14,7 +14,7 @@ jobs:
         
       - name: Pull code and Build ui image
         env:
-          VERSION: enterprise-2107-fixbug
+          VERSION: enterprise-2110-fixbug
           ALLINONE: true
           TRAVIS_PULL_REQUEST: false
           DOMESTIC_BASE_NAME: image.goodrain.com

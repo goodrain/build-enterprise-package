@@ -109,20 +109,20 @@ EOF
 function get_rbd_images() {
 
     cat >./offline/rbd_image/list.txt <<EOF
-image.goodrain.com/rainbond:$RBD_VER-allinone
-image.goodrain.com/rbd-node:$RBD_VER
-image.goodrain.com/rbd-resource-proxy:$RBD_VER
-image.goodrain.com/rbd-eventlog:$RBD_VER
-image.goodrain.com/rbd-worker:$RBD_VER
-image.goodrain.com/rbd-gateway:$RBD_VER
-image.goodrain.com/rbd-chaos:$RBD_VER
-image.goodrain.com/rbd-api:$RBD_VER
-image.goodrain.com/rbd-webcli:$RBD_VER
-image.goodrain.com/rbd-mq:$RBD_VER
-image.goodrain.com/rbd-monitor:$RBD_VER
-image.goodrain.com/rbd-mesh-data-panel:$RBD_VER
-image.goodrain.com/rbd-init-probe:$RBD_VER
-image.goodrain.com/rbd-grctl:$RBD_VER
+image.goodrain.com/goodrain/rainbond:$RBD_VER-allinone
+image.goodrain.com/goodrain/rbd-node:$RBD_VER
+image.goodrain.com/goodrain/rbd-resource-proxy:$RBD_VER
+image.goodrain.com/goodrain/rbd-eventlog:$RBD_VER
+image.goodrain.com/goodrain/rbd-worker:$RBD_VER
+image.goodrain.com/goodrain/rbd-gateway:$RBD_VER
+image.goodrain.com/goodrain/rbd-chaos:$RBD_VER
+image.goodrain.com/goodrain/rbd-api:$RBD_VER
+image.goodrain.com/goodrain/rbd-webcli:$RBD_VER
+image.goodrain.com/goodrain/rbd-mq:$RBD_VER
+image.goodrain.com/goodrain/rbd-monitor:$RBD_VER
+image.goodrain.com/goodrain/rbd-mesh-data-panel:$RBD_VER
+image.goodrain.com/goodrain/rbd-init-probe:$RBD_VER
+image.goodrain.com/goodrain/rbd-grctl:$RBD_VER
 registry.cn-hangzhou.aliyuncs.com/goodrain/builder:v5.6.0
 registry.cn-hangzhou.aliyuncs.com/goodrain/runner:v5.6.0
 registry.cn-hangzhou.aliyuncs.com/goodrain/rainbond-operator:v2.3.0

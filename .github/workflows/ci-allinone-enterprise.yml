@@ -17,7 +17,6 @@ jobs:
           VERSION: enterprise-2203
           ALLINONE: true
           TRAVIS_PULL_REQUEST: false
-          ROUTE_MODE: history
           DOMESTIC_BASE_NAME: image.goodrain.com
           BUILD_IMAGE_BASE_NAME: image.goodrain.com
           DOMESTIC_DOCKER_PASSWORD: ${{ secrets.DOMESTIC_DOCKER_PASSWORD }}

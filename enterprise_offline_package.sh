@@ -125,7 +125,7 @@ image.goodrain.com/rbd-init-probe:$RBD_VER
 image.goodrain.com/rbd-grctl:$RBD_VER
 registry.cn-hangzhou.aliyuncs.com/goodrain/builder:v5.3.3
 registry.cn-hangzhou.aliyuncs.com/goodrain/runner:v5.3.3
-registry.cn-hangzhou.aliyuncs.com/goodrain/rainbond-operator:v2.0.3
+image.goodrain.com/rainbond-operator:$RBD_VER
 registry.cn-hangzhou.aliyuncs.com/goodrain/plugins-tcm:5.1.7
 registry.cn-hangzhou.aliyuncs.com/goodrain/kubernetes-dashboard:v2.0.1-3
 registry.cn-hangzhou.aliyuncs.com/goodrain/nfs-provisioner:latest

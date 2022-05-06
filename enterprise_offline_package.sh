@@ -8,14 +8,14 @@ DOMESTIC_NAMESPACE=${DOMESTIC_NAMESPACE:-'goodrain'}
 
 function get_nfscli() {
 
-    if [[ -f "./offline/nfs_all.tar.gz" ]]; then
+    if [[ -f "./offline/nfs_all_arm.tar.gz" ]]; then
         echo "[INFO] nfs binaries already existed"
     else
         wget -c "$NFSCLI_URL" || {
             echo "[ERROR] Downloading nfs binaries failed"
             exit 1
         }
-        mv nfs_all.tar.gz ./offline/nfs_all.tar.gz
+        mv nfs_all_arm.tar.gz ./offline/nfs_all.tar.gz
     fi
 
 }
@@ -96,8 +96,25 @@ EOF
     while read k8s_image_name; do
         k8s_offline_image=$(echo "${k8s_image_name}" | awk -F"/" '{print $NF}')
         docker pull "${k8s_image_name}" ||  exit 1
-        docker tag "${k8s_image_name}" goodrain.me/"${k8s_offline_image}"
-        docker save goodrain.me/"${k8s_offline_image}" -o ./offline/k8s_image/"${k8s_offline_image}".tgz
+
+        if [ "${k8s_offline_image}" = "coreos-etcd:v3.4.13-arm64" ]; then
+            docker tag "${k8s_image_name}" goodrain.me/coreos-etcd:v3.4.13-rke
+            docker save goodrain.me/coreos-etcd:v3.4.13-rke -o ./offline/k8s_image/coreos-etcd:v3.4.13-rke.tgz
+        elif [ "${k8s_offline_image}" = "k8s-dns-kube-dns:1.15.10" ] || [ "${k8s_offline_image}" = "k8s-dns-dnsmasq-nanny:1.15.10" ] || [ "${k8s_offline_image}" = "rancher/k8s-dns-sidecar:1.15.10" ]; then
+            docker save rancher/"${k8s_offline_image}" -o ./offline/k8s_image/"${k8s_offline_image}".tgz
+        elif [ "${k8s_offline_image}" = "hyperkube:v1.19.6-rancher1" ]; then
+            docker tag "${k8s_image_name}" goodrain.me/hyperkube:v1.19.6-rke
+            docker save goodrain.me/hyperkube:v1.19.6-rke -o ./offline/k8s_image/hyperkube:v1.19.6-rke.tgz
+        elif [ "${k8s_offline_image}" = "coreos-flannel:v0.13.0-rancher1" ]; then
+            docker tag "${k8s_image_name}" goodrain.me/coreos-flannel:v0.13.0-rke
+            docker save goodrain.me/coreos-flannel:v0.13.0-rke -o ./offline/k8s_image/coreos-flannel:v0.13.0-rke.tgz
+        elif [ "${k8s_offline_image}" = "flannel-cni:v0.3.0-rancher6" ]; then
+            docker tag "${k8s_image_name}" goodrain.me/flannel-cni:v0.3.0-rke
+            docker save goodrain.me/flannel-cni:v0.3.0-rke -o ./offline/k8s_image/flannel-cni:v0.3.0-rke.tgz
+        else
+            docker tag "${k8s_image_name}" goodrain.me/"${k8s_offline_image}"
+            docker save goodrain.me/"${k8s_offline_image}" -o ./offline/k8s_image/"${k8s_offline_image}".tgz
+        fi
         
     done <./offline/k8s_image/list.txt
 

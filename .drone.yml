@@ -179,5 +179,5 @@ volumes:
 - name: dockersock
   temp: {}
 
-depends_on:
-- build-rainbond-allinone
+# depends_on:
+# - build-rainbond-allinone

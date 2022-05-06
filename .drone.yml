@@ -138,6 +138,7 @@ steps:
   commands:
   - git clone -b $REGION_BRANCH --depth=1 https://$GITLAB_USER:$GITLAB_PASS@git.goodrain.com/goodrain/rainbond.git
   - ls
+  - rm -rf rainbond/hack
   - mv region/* rainbond/
 
 - name: build rainbond

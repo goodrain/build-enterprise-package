@@ -1,8 +1,10 @@
 #!/bin/bash
 
-export NFSCLI_URL="https://rainbond-pkg.oss-cn-shanghai.aliyuncs.com/offline/nfs-client/nfs_all.tar.gz"
-export DOCKER_VER=19.03.5
+export NFSCLI_URL="https://rainbond-pkg.oss-cn-shanghai.aliyuncs.com/offline/nfs-client/nfs_all_arm.tar.gz"
+export DOCKER_VER=19.03.9
 RBD_VER=${RBD_VER:-'enterprise-2108'}
+IMAGE_BASE_NAME=${BUILD_IMAGE_BASE_NAME:-'rainbond'}
+DOMESTIC_NAMESPACE=${DOMESTIC_NAMESPACE:-'goodrain'}
 
 function get_nfscli() {
 
@@ -35,7 +37,7 @@ function get_kernel() {
 
 function get_docker() {
 
-    DOCKER_URL="https://rainbond-pkg.oss-cn-shanghai.aliyuncs.com/offline/docker/docker-${DOCKER_VER}.tgz"
+    DOCKER_URL="https://rainbond-pkg.oss-cn-shanghai.aliyuncs.com/offline/docker/docker-arm-${DOCKER_VER}.tgz"
     if [[ -f "/opt/docker/down/docker-${DOCKER_VER}.tgz" ]]; then
         echo "[INFO] docker binaries already existed"
     else
@@ -60,7 +62,7 @@ function get_offline_script() {
 
 function get_command_line_tools() {
 
-    TOOLS_URL="https://grstatic.oss-cn-shanghai.aliyuncs.com/binary/kubectl"
+    TOOLS_URL="https://grstatic.oss-cn-shanghai.aliyuncs.com/binary/kubectl-arm"
     if [[ -f "./offline/kubectl" ]]; then
         echo "[INFO] command line tools already existed"
     else
@@ -76,32 +78,27 @@ function get_command_line_tools() {
 function get_k8s_images() {
 
     cat >./offline/k8s_image/list.txt <<EOF
-registry.cn-hangzhou.aliyuncs.com/goodrain/coreos-etcd:v3.4.13-rke
-registry.cn-hangzhou.aliyuncs.com/goodrain/rke-tools:v0.1.68
-registry.cn-hangzhou.aliyuncs.com/goodrain/cluster-proportional-autoscaler:1.8.1
-registry.cn-hangzhou.aliyuncs.com/goodrain/coredns-coredns:1.7.0
-registry.cn-hangzhou.aliyuncs.com/goodrain/k8s-dns-node-cache:1.15.13
-registry.cn-hangzhou.aliyuncs.com/goodrain/hyperkube:v1.19.6-rke
-registry.cn-hangzhou.aliyuncs.com/goodrain/coreos-flannel:v0.13.0-rke
-registry.cn-hangzhou.aliyuncs.com/goodrain/flannel-cni:v0.3.0-rke
-registry.cn-hangzhou.aliyuncs.com/goodrain/pause:3.2
-registry.cn-hangzhou.aliyuncs.com/goodrain/metrics-server:v0.3.6
+rancher/coreos-etcd:v3.4.13-arm64
+rancher/rke-tools:v0.1.68
+rancher/cluster-proportional-autoscaler:1.8.1
+rancher/coredns-coredns:1.7.0
+rancher/k8s-dns-node-cache:1.15.13
+rancher/hyperkube:v1.19.6-rancher1
+rancher/coreos-flannel:v0.13.0-rancher1
+rancher/flannel-cni:v0.3.0-rancher6
+rancher/pause:3.2
+rancher/metrics-server:v0.3.6
 rancher/k8s-dns-kube-dns:1.15.10
 rancher/k8s-dns-dnsmasq-nanny:1.15.10
 rancher/k8s-dns-sidecar:1.15.10
 EOF
 
     while read k8s_image_name; do
-        k8s_image_tar=$(echo ${k8s_image_name} | awk -F"/" '{print $NF}' | tr : -)
-        k8s_offline_image=$(echo ${k8s_image_name} | awk -F"/" '{print $NF}')
-
-        if [[ -f "./offline/k8s_image/${k8s_image_tar}.tgz" ]]; then
-            echo "[INFO] ${k8s_image_tar} image already existed"
-        else
-            docker pull ${k8s_image_name} ||  exit 1
-            docker tag ${k8s_image_name} goodrain.me/${k8s_offline_image}
-            docker save goodrain.me/${k8s_offline_image} -o ./offline/k8s_image/${k8s_offline_image}.tgz
-        fi
+        k8s_offline_image=$(echo "${k8s_image_name}" | awk -F"/" '{print $NF}')
+        docker pull "${k8s_image_name}" ||  exit 1
+        docker tag "${k8s_image_name}" goodrain.me/"${k8s_offline_image}"
+        docker save goodrain.me/"${k8s_offline_image}" -o ./offline/k8s_image/"${k8s_offline_image}".tgz
+        
     done <./offline/k8s_image/list.txt
 
 }
@@ -109,49 +106,44 @@ EOF
 function get_rbd_images() {
 
     cat >./offline/rbd_image/list.txt <<EOF
-image.goodrain.com/rainbond:$RBD_VER-allinone
-image.goodrain.com/rbd-node:$RBD_VER
-image.goodrain.com/rbd-resource-proxy:$RBD_VER
-image.goodrain.com/rbd-eventlog:$RBD_VER
-image.goodrain.com/rbd-worker:$RBD_VER
-image.goodrain.com/rbd-gateway:$RBD_VER
-image.goodrain.com/rbd-chaos:$RBD_VER
-image.goodrain.com/rbd-api:$RBD_VER
-image.goodrain.com/rbd-webcli:$RBD_VER
-image.goodrain.com/rbd-mq:$RBD_VER
-image.goodrain.com/rbd-monitor:$RBD_VER
-image.goodrain.com/rbd-mesh-data-panel:$RBD_VER
-image.goodrain.com/rbd-init-probe:$RBD_VER
-image.goodrain.com/rbd-grctl:$RBD_VER
-registry.cn-hangzhou.aliyuncs.com/goodrain/builder:v5.3.3
-registry.cn-hangzhou.aliyuncs.com/goodrain/runner:v5.3.3
-registry.cn-hangzhou.aliyuncs.com/goodrain/rainbond-operator:v2.0.3
+${IMAGE_BASE_NAME}/${DOMESTIC_NAMESPACE}/rainbond:$RBD_VER-allinone
+${IMAGE_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-node:$RBD_VER
+${IMAGE_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-resource-proxy:$RBD_VER
+${IMAGE_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-eventlog:$RBD_VER
+${IMAGE_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-worker:$RBD_VER
+${IMAGE_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-gateway:$RBD_VER
+${IMAGE_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-chaos:$RBD_VER
+${IMAGE_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-api:$RBD_VER
+${IMAGE_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-webcli:$RBD_VER
+${IMAGE_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-mq:$RBD_VER
+${IMAGE_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-monitor:$RBD_VER
+${IMAGE_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-mesh-data-panel:$RBD_VER
+${IMAGE_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-init-probe:$RBD_VER
+${IMAGE_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-grctl:$RBD_VER
+${IMAGE_BASE_NAME}/${DOMESTIC_NAMESPACE}/rainbond-operator:$RBD_VER
 registry.cn-hangzhou.aliyuncs.com/goodrain/plugins-tcm:5.1.7
-registry.cn-hangzhou.aliyuncs.com/goodrain/kubernetes-dashboard:v2.0.1-3
-registry.cn-hangzhou.aliyuncs.com/goodrain/nfs-provisioner:latest
-registry.cn-hangzhou.aliyuncs.com/goodrain/rbd-db:8.0.19
-registry.cn-hangzhou.aliyuncs.com/goodrain/metrics-scraper:v1.0.4
-registry.cn-hangzhou.aliyuncs.com/goodrain/etcd:v3.3.18
-registry.cn-hangzhou.aliyuncs.com/goodrain/mysqld-exporter:latest
-registry.cn-hangzhou.aliyuncs.com/goodrain/registry:2.6.2
-registry.cn-hangzhou.aliyuncs.com/goodrain/smallimage:latest
+kubernetesui/dashboard:v2.0.1
+rifelpet/nfs-provisioner:v2.2.2
+mysql/mysql-server:8.0.19
+kubernetesui/metrics-scraper:v1.0.4
+quay.io/coreos/etcd:v3.3.18-arm64
+prom/mysqld-exporter:latest
+registry:2.6.2
 EOF
     while read rbd_image_name; do
-        rbd_image_tar=$(echo ${rbd_image_name} | awk -F"/" '{print $NF}' | tr : -)
-        rbd_offline_image=$(echo ${rbd_image_name} | awk -F"/" '{print $NF}')
+        rbd_offline_image=$(echo "${rbd_image_name}" | awk -F"/" '{print $NF}')
 
-        if [[ -f "./offline/rbd_image/${rbd_image_tar}.tgz" ]]; then
-            echo "[INFO] ${rbd_image_tar} image already existed"
-        else
-            docker pull ${rbd_image_name} || exit 1
-            docker tag ${rbd_image_name} goodrain.me/${rbd_offline_image}
-            docker save goodrain.me/${rbd_offline_image} -o ./offline/rbd_image/${rbd_offline_image}.tgz
-        fi
+        docker pull "${rbd_image_name}" || exit 1
+        docker tag "${rbd_image_name}" goodrain.me/"${rbd_offline_image}"
+        docker save goodrain.me/"${rbd_offline_image}" -o ./offline/rbd_image/"${rbd_offline_image}".tgz
+        
     done <./offline/rbd_image/list.txt
 
 }
 
 function main() {
+    
+    docker login -u "$DOMESTIC_DOCKER_USERNAME" -p "$DOMESTIC_DOCKER_PASSWORD" "${DOMESTIC_BASE_NAME}"
 
     mkdir -p ./offline ./offline/k8s_image ./offline/rbd_image
     # get nfs client package

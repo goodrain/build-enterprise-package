@@ -231,27 +231,28 @@ steps:
       include:
       - custom
 
-# - name: push rainbond package
-#   image: rainbond/docker:dind
-#   privileged: true
-#   volumes:
-#   - name: dockersock
-#     path: /var/run
-#   environment:
-#     DOMESTIC_BASE_NAME:
-#       from_secret: domestic_base_name
-    
-#     GOOS: linux
-#     GOARCH: arm64
-#   commands:
-#   - sleep 10 # give docker enough time to start
-#   - wget https://gosspublic.alicdn.com/ossutil/1.7.11/ossutilarm64 && chmod +x ossutilarm64
-#   - ./ossutilarm64 config -e oss-cn-shanghai.aliyuncs.com -i $AKI -k $AKS
-#   - ./ossutilarm64 cp -rf rainbond-offline-*.tgz oss://rainbond-pkg/offline/5.3-enterprise/
-#   when:
-#     event:
-#       include:
-#       - custom
+- name: push rainbond package
+  image: rainbond/docker:dind
+  privileged: true
+  volumes:
+  - name: dockersock
+    path: /var/run
+  environment:
+    AKI:
+      from_secret: aki
+    AKS:
+      from_secret: aks
+    GOOS: linux
+    GOARCH: arm64
+  commands:
+  - sleep 10 # give docker enough time to start
+  - wget https://gosspublic.alicdn.com/ossutil/1.7.11/ossutilarm64 && chmod +x ossutilarm64
+  - ./ossutilarm64 config -e oss-cn-shanghai.aliyuncs.com -i $AKI -k $AKS
+  - ./ossutilarm64 cp -rf rainbond-offline-*.tgz oss://rainbond-pkg/offline/5.3-enterprise/
+  when:
+    event:
+      include:
+      - custom
 
 services:
 - name: docker

@@ -146,6 +146,9 @@ kubernetesui/metrics-scraper:v1.0.4
 quay.io/coreos/etcd:v3.3.18-arm64
 prom/mysqld-exporter:latest
 registry:2.6.2
+registry.cn-hangzhou.aliyuncs.com/goodrain/smallimage:latest
+registry.cn-hangzhou.aliyuncs.com/goodrain/builder:v5.6.0-release-arm64
+registry.cn-hangzhou.aliyuncs.com/goodrain/runner:v5.6.0-release-arm64
 EOF
     while read rbd_image_name; do
         rbd_offline_image=$(echo "${rbd_image_name}" | awk -F"/" '{print $NF}')
@@ -169,6 +172,14 @@ EOF
             docker pull "${rbd_image_name}" || exit 1
             docker tag "${rbd_image_name}" goodrain.me/etcd:v3.3.18
             docker save goodrain.me/etcd:v3.3.18 -o ./offline/rbd_image/etcd:v3.3.18.tgz
+        elif [ "${rbd_offline_image}" = "builder:v5.6.0-release-arm64" ];then
+            docker pull "${rbd_image_name}" || exit 1
+            docker tag "${rbd_image_name}" goodrain.me/builder:latest
+            docker save goodrain.me/builder:latest -o ./offline/rbd_image/builder:latest.tgz
+        elif [ "${rbd_offline_image}" = "runner:v5.6.0-release-arm64" ];then
+            docker pull "${rbd_image_name}" || exit 1
+            docker tag "${rbd_image_name}" goodrain.me/runner:latest
+            docker save goodrain.me/runner:latest -o ./offline/rbd_image/runner:latest.tgz
         else
             docker pull "${rbd_image_name}" || exit 1
             docker tag "${rbd_image_name}" goodrain.me/"${rbd_offline_image}"

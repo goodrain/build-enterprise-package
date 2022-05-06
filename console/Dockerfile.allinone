@@ -37,7 +37,8 @@ RUN chmod +x /app/ui/entrypoint.sh &&  \
     && mkdir /app/logs \
     && mkdir /app/data \
     && mkdir /root/.ssh \
-    && python -m pip install --upgrade pip \
+    && wget https://mirrors.aliyun.com/pypi/get-pip.py \
+    && python get-pip.py \
     && pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple \
     && pip install -r requirements.txt \
     && python manage.py collectstatic --noinput --ignore weavescope-src --ignore drf-yasg  --ignore rest_framework\

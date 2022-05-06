@@ -3,7 +3,7 @@
 export NFSCLI_URL="https://rainbond-pkg.oss-cn-shanghai.aliyuncs.com/offline/nfs-client/nfs_all_arm.tar.gz"
 export DOCKER_VER=19.03.9
 RBD_VER=${RBD_VER:-'enterprise-2108'}
-IMAGE_BASE_NAME=${BUILD_IMAGE_BASE_NAME:-'rainbond'}
+DOMESTIC_BASE_NAME=${DOMESTIC_BASE_NAME:-'rainbond'}
 DOMESTIC_NAMESPACE=${DOMESTIC_NAMESPACE:-'goodrain'}
 
 function get_nfscli() {
@@ -46,7 +46,7 @@ function get_docker() {
             echo "[ERROR] downloading docker failed"
             exit 1
         }
-        mv ./docker-${DOCKER_VER}.tgz ./offline/docker-${DOCKER_VER}.tgz
+        mv ./docker-arm-${DOCKER_VER}.tgz ./offline/docker-${DOCKER_VER}.tgz
     fi
 
 }
@@ -106,21 +106,21 @@ EOF
 function get_rbd_images() {
 
     cat >./offline/rbd_image/list.txt <<EOF
-${IMAGE_BASE_NAME}/${DOMESTIC_NAMESPACE}/rainbond:$RBD_VER-allinone
-${IMAGE_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-node:$RBD_VER
-${IMAGE_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-resource-proxy:$RBD_VER
-${IMAGE_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-eventlog:$RBD_VER
-${IMAGE_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-worker:$RBD_VER
-${IMAGE_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-gateway:$RBD_VER
-${IMAGE_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-chaos:$RBD_VER
-${IMAGE_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-api:$RBD_VER
-${IMAGE_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-webcli:$RBD_VER
-${IMAGE_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-mq:$RBD_VER
-${IMAGE_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-monitor:$RBD_VER
-${IMAGE_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-mesh-data-panel:$RBD_VER
-${IMAGE_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-init-probe:$RBD_VER
-${IMAGE_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-grctl:$RBD_VER
-${IMAGE_BASE_NAME}/${DOMESTIC_NAMESPACE}/rainbond-operator:$RBD_VER
+${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/rainbond:$RBD_VER-allinone
+${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-node:$RBD_VER
+${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-resource-proxy:$RBD_VER
+${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-eventlog:$RBD_VER
+${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-worker:$RBD_VER
+${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-gateway:$RBD_VER
+${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-chaos:$RBD_VER
+${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-api:$RBD_VER
+${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-webcli:$RBD_VER
+${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-mq:$RBD_VER
+${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-monitor:$RBD_VER
+${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-mesh-data-panel:$RBD_VER
+${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-init-probe:$RBD_VER
+${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-grctl:$RBD_VER
+${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/rainbond-operator:$RBD_VER
 registry.cn-hangzhou.aliyuncs.com/goodrain/plugins-tcm:5.1.7
 kubernetesui/dashboard:v2.0.1
 rifelpet/nfs-provisioner:v2.2.2

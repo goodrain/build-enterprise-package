@@ -115,7 +115,7 @@ EOF
             docker tag "${k8s_image_name}" goodrain.me/"${k8s_offline_image}"
             docker save goodrain.me/"${k8s_offline_image}" -o ./offline/k8s_image/"${k8s_offline_image}".tgz
         fi
-        
+
     done <./offline/k8s_image/list.txt
 
 }
@@ -149,11 +149,31 @@ registry:2.6.2
 EOF
     while read rbd_image_name; do
         rbd_offline_image=$(echo "${rbd_image_name}" | awk -F"/" '{print $NF}')
-
-        docker pull "${rbd_image_name}" || exit 1
-        docker tag "${rbd_image_name}" goodrain.me/"${rbd_offline_image}"
-        docker save goodrain.me/"${rbd_offline_image}" -o ./offline/rbd_image/"${rbd_offline_image}".tgz
-        
+        if [ "${rbd_offline_image}" = "rainbond-operator:${RBD_VER}" ]; then
+            docker pull "${rbd_image_name}" || exit 1
+            docker tag "${rbd_image_name}" goodrain.me/rainbond-operator:v2.0.1
+            docker save goodrain.me/rainbond-operator:v2.0.1 -o ./offline/rbd_image/rainbond-operator:v2.0.1.tgz
+        elif [ "${rbd_offline_image}" = "dashboard:v2.0.1" ];then
+            docker pull "${rbd_image_name}" || exit 1
+            docker tag "${rbd_image_name}" goodrain.me/kubernetes-dashboard:v2.0.1-3
+            docker save goodrain.me/kubernetes-dashboard:v2.0.1-3 -o ./offline/rbd_image/kubernetes-dashboard:v2.0.1-3.tgz
+        elif [ "${rbd_offline_image}" = "nfs-provisioner:v2.2.2" ];then
+            docker pull "${rbd_image_name}" || exit 1
+            docker tag "${rbd_image_name}" goodrain.me/nfs-provisioner:latest
+            docker save goodrain.me/nfs-provisioner:latest -o ./offline/rbd_image/nfs-provisioner:latest.tgz
+        elif [ "${rbd_offline_image}" = "mysql-server:8.0.19" ];then
+            docker pull "${rbd_image_name}" || exit 1
+            docker tag "${rbd_image_name}" goodrain.me/rbd-db:8.0.19
+            docker save goodrain.me/rbd-db:8.0.19 -o ./offline/rbd_image/rbd-db:8.0.19.tgz
+        elif [ "${rbd_offline_image}" = "etcd:v3.3.18-arm64" ];then
+            docker pull "${rbd_image_name}" || exit 1
+            docker tag "${rbd_image_name}" goodrain.me/etcd:v3.3.18
+            docker save goodrain.me/etcd:v3.3.18 -o ./offline/rbd_image/etcd:v3.3.18.tgz
+        else
+            docker pull "${rbd_image_name}" || exit 1
+            docker tag "${rbd_image_name}" goodrain.me/"${rbd_offline_image}"
+            docker save goodrain.me/"${rbd_offline_image}" -o ./offline/rbd_image/"${rbd_offline_image}".tgz
+        fi
     done <./offline/rbd_image/list.txt
 
 }

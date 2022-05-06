@@ -188,7 +188,7 @@ depends_on:
 ---
 
 kind: pipeline
-name: build-rainbond-region
+name: build-rainbond-package
 
 platform:
   os: linux

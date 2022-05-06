@@ -16,8 +16,7 @@ RUN go build -ldflags "$LDFLAGS" -o /cloud-adaptor $PWD/cmd/cloud-adaptor
 FROM rainbond/rainbond-ui:${VERSION}
 
 ARG RELEASE_DESC=
-ADD . .
-RUN pwd && ls -a
+
 RUN mkdir -p /app/ui /usr/share/zoneinfo/Asia/ && \
     apt-get update && apt-get install -y supervisor && rm -rf /var/lib/apt/lists/* && \
     wget https://goodrain-pkg.oss-cn-shanghai.aliyuncs.com/pkg/helm-arm64 && chmod +x helm-arm64 && mv helm-arm64 /usr/local/bin/helm && \
@@ -39,7 +38,8 @@ RUN chmod +x /app/ui/entrypoint.sh &&  \
     && mkdir /app/data \
     && mkdir /root/.ssh \
     && python -m pip install --upgrade pip \
-    && pip install -r requirements.txt -i http://mirrors.cloud.aliyuncs.com/pypi/simple \
+    && pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple \
+    && pip install -r requirements.txt \
     && python manage.py collectstatic --noinput --ignore weavescope-src --ignore drf-yasg  --ignore rest_framework\
     && rm -rf /root/.cache \
     && rm -rf /tmp/* \

@@ -108,7 +108,7 @@
 # - name: dockersock
 #   temp: {}
 
----
+# ---
 
 kind: pipeline
 name: build-rainbond-region

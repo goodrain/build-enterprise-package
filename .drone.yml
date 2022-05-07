@@ -1,116 +1,116 @@
-kind: pipeline
-name: build-rainbond-allinone
+# kind: pipeline
+# name: build-rainbond-allinone
 
-platform:
-  os: linux
-  arch: arm64
+# platform:
+#   os: linux
+#   arch: arm64
 
-trigger:
-  event:
-    include:
-    - custom
+# trigger:
+#   event:
+#     include:
+#     - custom
 
-node:
-  city: sydney
+# node:
+#   city: sydney
 
 
-steps:
-- name: clone rainbond-ui-cloud
-  image: alpine/git
-  environment:
-    UI_BRANCH:
-      from_secret: ui_branch
-    CONSOLE_BRANCH:
-      from_secret: console_branch
-    GITLAB_USER:
-      from_secret: gitlab_user
-    GITLAB_PASS:
-      from_secret: gitlab_pass
-  commands:
-  - git clone -b $UI_BRANCH --depth=1 https://$GITLAB_USER:$GITLAB_PASS@git.goodrain.com/goodrain/rainbond-ui-cloud.git
-  - git clone -b $CONSOLE_BRANCH --depth=1 https://$GITLAB_USER:$GITLAB_PASS@git.goodrain.com/goodrain/rainbond-console-cloud.git
-  - mv ui/Dockerfile rainbond-ui-cloud/
-  - mv console/* rainbond-console-cloud/
+# steps:
+# - name: clone rainbond-ui-cloud
+#   image: alpine/git
+#   environment:
+#     UI_BRANCH:
+#       from_secret: ui_branch
+#     CONSOLE_BRANCH:
+#       from_secret: console_branch
+#     GITLAB_USER:
+#       from_secret: gitlab_user
+#     GITLAB_PASS:
+#       from_secret: gitlab_pass
+#   commands:
+#   - git clone -b $UI_BRANCH --depth=1 https://$GITLAB_USER:$GITLAB_PASS@git.goodrain.com/goodrain/rainbond-ui-cloud.git
+#   - git clone -b $CONSOLE_BRANCH --depth=1 https://$GITLAB_USER:$GITLAB_PASS@git.goodrain.com/goodrain/rainbond-console-cloud.git
+#   - mv ui/Dockerfile rainbond-ui-cloud/
+#   - mv console/* rainbond-console-cloud/
 
-- name: build rainbond-ui-cloud dist
-  image: node:12
-  environment:
-    ALLINONE: true
-  commands:
-  - cd rainbond-ui-cloud
-  - yarn config set registry https://registry.npm.taobao.org
-  - yarn install
-  - yarn run build
+# - name: build rainbond-ui-cloud dist
+#   image: node:12
+#   environment:
+#     ALLINONE: true
+#   commands:
+#   - cd rainbond-ui-cloud
+#   - yarn config set registry https://registry.npm.taobao.org
+#   - yarn install
+#   - yarn run build
 
-- name: build rainbond-ui-cloud
-  image: rainbond/docker:dind
-  privileged: true
-  volumes:
-  - name: dockersock
-    path: /var/run
-  environment:
-    BUILD_VERSION:
-      from_secret: build_version
-    BASE_BUILD_VERSION:
-      from_secret: base_build_version
-  commands:
-  - sleep 10 # give docker enough time to start
-  - cd rainbond-ui-cloud
-  - docker build --build-arg VERSION=$BASE_BUILD_VERSION -t rainbond/rainbond-ui:$BUILD_VERSION .
+# - name: build rainbond-ui-cloud
+#   image: rainbond/docker:dind
+#   privileged: true
+#   volumes:
+#   - name: dockersock
+#     path: /var/run
+#   environment:
+#     BUILD_VERSION:
+#       from_secret: build_version
+#     BASE_BUILD_VERSION:
+#       from_secret: base_build_version
+#   commands:
+#   - sleep 10 # give docker enough time to start
+#   - cd rainbond-ui-cloud
+#   - docker build --build-arg VERSION=$BASE_BUILD_VERSION -t rainbond/rainbond-ui:$BUILD_VERSION .
 
-- name: build rainbond-console
-  image: rainbond/docker:dind
-  privileged: true
-  volumes:
-  - name: dockersock
-    path: /var/run
-  environment:
-    TRAVIS_PULL_REQUEST:
-      from_secret: travis_pull_request
-    DOMESTIC_DOCKER_USERNAME:
-      from_secret: domestic_docker_username
-    DOMESTIC_DOCKER_PASSWORD:
-      from_secret: domestic_docker_password
-    DOMESTIC_BASE_NAME:
-      from_secret: domestic_base_name
-    BUILD_VERSION:
-      from_secret: build_version
-    DOMESTIC_NAMESPACE:
-      from_secret: domestic_namespace
-    DOCKER_USERNAME:
-      from_secret: docker_username
-    DOCKER_PASSWORD:
-      from_secret: docker_password
-    ADAPTOR_VERSION:
-      from_secret: adaptor_version
-    GITLAB_USER:
-      from_secret: gitlab_user
-    GITLAB_PASS:
-      from_secret: gitlab_pass
-    GOOS: linux
-    GOARCH: arm64
-  commands:
-  - rm -rf rainbond-ui
-  - cd rainbond-console-cloud
-  - VERSION=$BUILD_VERSION BUILD_ARCH=$GOARCH ./release.sh allinone
-  when:
-    event:
-      include:
-      - custom
+# - name: build rainbond-console
+#   image: rainbond/docker:dind
+#   privileged: true
+#   volumes:
+#   - name: dockersock
+#     path: /var/run
+#   environment:
+#     TRAVIS_PULL_REQUEST:
+#       from_secret: travis_pull_request
+#     DOMESTIC_DOCKER_USERNAME:
+#       from_secret: domestic_docker_username
+#     DOMESTIC_DOCKER_PASSWORD:
+#       from_secret: domestic_docker_password
+#     DOMESTIC_BASE_NAME:
+#       from_secret: domestic_base_name
+#     BUILD_VERSION:
+#       from_secret: build_version
+#     DOMESTIC_NAMESPACE:
+#       from_secret: domestic_namespace
+#     DOCKER_USERNAME:
+#       from_secret: docker_username
+#     DOCKER_PASSWORD:
+#       from_secret: docker_password
+#     ADAPTOR_VERSION:
+#       from_secret: adaptor_version
+#     GITLAB_USER:
+#       from_secret: gitlab_user
+#     GITLAB_PASS:
+#       from_secret: gitlab_pass
+#     GOOS: linux
+#     GOARCH: arm64
+#   commands:
+#   - rm -rf rainbond-ui
+#   - cd rainbond-console-cloud
+#   - VERSION=$BUILD_VERSION BUILD_ARCH=$GOARCH ./release.sh allinone
+#   when:
+#     event:
+#       include:
+#       - custom
 
-services:
-- name: docker
-  image: docker:dind
-  privileged: true
-  volumes:
-  - name: dockersock
-    path: /var/run
+# services:
+# - name: docker
+#   image: docker:dind
+#   privileged: true
+#   volumes:
+#   - name: dockersock
+#     path: /var/run
 
-volumes:
-- name: dockersock
-  temp: {}
+# volumes:
+# - name: dockersock
+#   temp: {}
 
----
+# ---
 
 kind: pipeline
 name: build-rainbond-region
@@ -184,8 +184,8 @@ volumes:
 - name: dockersock
   temp: {}
 
-depends_on:
-- build-rainbond-allinone
+# depends_on:
+# - build-rainbond-allinone
 
 ---
 
@@ -269,5 +269,5 @@ volumes:
   temp: {}
 
 depends_on:
-- build-rainbond-allinone
+# - build-rainbond-allinone
 - build-rainbond-region

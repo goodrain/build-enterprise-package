@@ -112,82 +112,82 @@
 
 # ---
 
-kind: pipeline
-name: build-rainbond-region
+# kind: pipeline
+# name: build-rainbond-region
 
-platform:
-  os: linux
-  arch: arm64
+# platform:
+#   os: linux
+#   arch: arm64
 
-trigger:
-  event:
-    include:
-    - custom
+# trigger:
+#   event:
+#     include:
+#     - custom
 
-node:
-  city: sydney
+# node:
+#   city: sydney
 
-steps:
-- name: clone rainbond
-  image: alpine/git
-  environment:
-    REGION_BRANCH:
-      from_secret: region_branch
-    GITLAB_USER:
-      from_secret: gitlab_user
-    GITLAB_PASS:
-      from_secret: gitlab_pass
-  commands:
-  - git clone -b $REGION_BRANCH --depth=1 https://$GITLAB_USER:$GITLAB_PASS@git.goodrain.com/goodrain/rainbond.git
-  - ls
-  - rm -rf rainbond/hack
-  - mv region/* rainbond/
+# steps:
+# - name: clone rainbond
+#   image: alpine/git
+#   environment:
+#     REGION_BRANCH:
+#       from_secret: region_branch
+#     GITLAB_USER:
+#       from_secret: gitlab_user
+#     GITLAB_PASS:
+#       from_secret: gitlab_pass
+#   commands:
+#   - git clone -b $REGION_BRANCH --depth=1 https://$GITLAB_USER:$GITLAB_PASS@git.goodrain.com/goodrain/rainbond.git
+#   - ls
+#   - rm -rf rainbond/hack
+#   - mv region/* rainbond/
 
-- name: build rainbond
-  image: rainbond/docker:dind
-  privileged: true
-  volumes:
-  - name: dockersock
-    path: /var/run
-  environment:
-    DOMESTIC_BASE_NAME:
-      from_secret: domestic_base_name
-    DOMESTIC_DOCKER_USERNAME:
-      from_secret: domestic_docker_username
-    DOMESTIC_DOCKER_PASSWORD:
-      from_secret: domestic_docker_password
-    BUILD_VERSION:
-      from_secret: build_version
-    DOMESTIC_NAMESPACE:
-      from_secret: domestic_namespace
-    GOOS: linux
-    GOARCH: arm64
-  commands:
-  - sleep 10 # give docker enough time to start
-  - cd rainbond
-  - VERSION=$BUILD_VERSION BUILD_GOARCH=arm64 BUILD_BASE_IMAGE_VERSION=3.7 ./release.sh all push
-  when:
-    event:
-      include:
-      - custom
+# - name: build rainbond
+#   image: rainbond/docker:dind
+#   privileged: true
+#   volumes:
+#   - name: dockersock
+#     path: /var/run
+#   environment:
+#     DOMESTIC_BASE_NAME:
+#       from_secret: domestic_base_name
+#     DOMESTIC_DOCKER_USERNAME:
+#       from_secret: domestic_docker_username
+#     DOMESTIC_DOCKER_PASSWORD:
+#       from_secret: domestic_docker_password
+#     BUILD_VERSION:
+#       from_secret: build_version
+#     DOMESTIC_NAMESPACE:
+#       from_secret: domestic_namespace
+#     GOOS: linux
+#     GOARCH: arm64
+#   commands:
+#   - sleep 10 # give docker enough time to start
+#   - cd rainbond
+#   - VERSION=$BUILD_VERSION BUILD_GOARCH=arm64 BUILD_BASE_IMAGE_VERSION=3.7 ./release.sh all push
+#   when:
+#     event:
+#       include:
+#       - custom
 
 
-services:
-- name: docker
-  image: docker:dind
-  privileged: true
-  volumes:
-  - name: dockersock
-    path: /var/run
+# services:
+# - name: docker
+#   image: docker:dind
+#   privileged: true
+#   volumes:
+#   - name: dockersock
+#     path: /var/run
 
-volumes:
-- name: dockersock
-  temp: {}
+# volumes:
+# - name: dockersock
+#   temp: {}
 
-# depends_on:
-# - build-rainbond-allinone
+# # depends_on:
+# # - build-rainbond-allinone
 
----
+# ---
 
 kind: pipeline
 name: build-rainbond-package
@@ -268,6 +268,6 @@ volumes:
 - name: dockersock
   temp: {}
 
-depends_on:
+# depends_on:
 # - build-rainbond-allinone
-- build-rainbond-region
+# - build-rainbond-region

@@ -2,7 +2,7 @@
 
 export NFSCLI_URL="https://rainbond-pkg.oss-cn-shanghai.aliyuncs.com/offline/nfs-client/nfs_all.tar.gz"
 export DOCKER_VER=19.03.5
-RBD_VER=${RBD_VER:-'enterprise-2203'}
+RBD_VER=${RBD_VER:-'enterprise-2208'}
 
 function get_nfscli() {
 
@@ -123,9 +123,9 @@ image.goodrain.com/goodrain/rbd-monitor:$RBD_VER
 image.goodrain.com/goodrain/rbd-mesh-data-panel:$RBD_VER
 image.goodrain.com/goodrain/rbd-init-probe:$RBD_VER
 image.goodrain.com/goodrain/rbd-grctl:$RBD_VER
-registry.cn-hangzhou.aliyuncs.com/goodrain/builder:v5.6.0
-registry.cn-hangzhou.aliyuncs.com/goodrain/runner:v5.6.0
-registry.cn-hangzhou.aliyuncs.com/goodrain/rainbond-operator:v2.3.0
+registry.cn-hangzhou.aliyuncs.com/goodrain/builder:latest
+registry.cn-hangzhou.aliyuncs.com/goodrain/runner:latest
+registry.cn-hangzhou.aliyuncs.com/goodrain/rainbond-operator:$RBD_VER
 registry.cn-hangzhou.aliyuncs.com/goodrain/plugins-tcm:5.1.7
 registry.cn-hangzhou.aliyuncs.com/goodrain/kubernetes-dashboard:v2.0.1-3
 registry.cn-hangzhou.aliyuncs.com/goodrain/nfs-provisioner:latest

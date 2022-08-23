@@ -29,8 +29,6 @@ steps:
   commands:
   - git clone -b $UI_BRANCH --depth=1 https://$GITLAB_USER:$GITLAB_PASS@git.goodrain.com/zhangqh/rainbond-ui-cloud.git
   - git clone -b $CONSOLE_BRANCH --depth=1 https://$GITLAB_USER:$GITLAB_PASS@git.goodrain.com/zhangqh/rainbond-console-cloud.git
-  - mv ui/Dockerfile rainbond-ui-cloud/
-  - mv console/* rainbond-console-cloud/
 
 - name: build rainbond-ui-cloud dist
   image: node:12

@@ -27,8 +27,8 @@ steps:
     GITLAB_PASS:
       from_secret: gitlab_pass
   commands:
-  - git clone -b $UI_BRANCH --depth=1 https://$GITLAB_USER:$GITLAB_PASS@git.goodrain.com/goodrain/rainbond-ui-cloud.git
-  - git clone -b $CONSOLE_BRANCH --depth=1 https://$GITLAB_USER:$GITLAB_PASS@git.goodrain.com/goodrain/rainbond-console-cloud.git
+  - git clone -b $UI_BRANCH --depth=1 https://$GITLAB_USER:$GITLAB_PASS@git.goeodrain.com/zhangqh/rainbond-ui-cloud.git
+  - git clone -b $CONSOLE_BRANCH --depth=1 https://$GITLAB_USER:$GITLAB_PASS@git.goodrain.com/zhangqh/rainbond-console-cloud.git
   - mv ui/Dockerfile rainbond-ui-cloud/
   - mv console/* rainbond-console-cloud/
 

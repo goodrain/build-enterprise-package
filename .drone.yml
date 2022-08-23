@@ -90,7 +90,7 @@ steps:
   commands:
   - rm -rf rainbond-ui
   - cd rainbond-console-cloud
-  - VERSION=$BUILD_VERSION BUILD_ARCH=$GOARCH ./release.sh allinone
+  - VERSION=$VERSION BUILD_ARCH=$GOARCH ./release.sh allinone
   when:
     event:
       include:

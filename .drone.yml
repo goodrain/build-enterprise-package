@@ -73,7 +73,7 @@ steps:
       from_secret: domestic_docker_password
     DOMESTIC_BASE_NAME:
       from_secret: domestic_base_name
-    BUILD_VERSION:
+    VERSION:
       from_secret: build_version
     DOMESTIC_NAMESPACE:
       from_secret: domestic_namespace

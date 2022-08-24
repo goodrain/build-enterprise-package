@@ -159,7 +159,7 @@ steps:
     DOCKER_USERNAME:
       from_secret: docker_username
     DOCKER_PASSWORD:
-      from_secret: docker_passworde
+      from_secret: docker_password
     IMAGE_DOMAIN:
       from_secret: image_domain
     GOOS: linux

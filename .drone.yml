@@ -91,7 +91,7 @@ steps:
   commands:
   - rm -rf rainbond-ui
   - cd rainbond-console-cloud
-  - VERSION=$VERSION GOARCH=arm64 ./release.sh allinone
+  - GOARCH=arm64 ./release.sh allinone
   when:
     event:
       include:

@@ -160,6 +160,8 @@ steps:
       from_secret: docker_username
     DOCKER_PASSWORD:
       from_secret: docker_passworde
+    IMAGE_DOMAIN:
+      from_secret: image_domain
     GOOS: linux
     GOARCH: arm64
   commands:

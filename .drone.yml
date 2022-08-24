@@ -271,5 +271,5 @@ volumes:
   temp: {}
 
 depends_on:
-- build-rainbond-allinone
+# - build-rainbond-allinone
 - build-rainbond-region

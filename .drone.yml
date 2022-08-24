@@ -171,7 +171,7 @@ steps:
   commands:
   - sleep 10 # give docker enough time to start
   - cd rainbond
-  - VERSION=$BUILD_VERSION BUILD_GOARCH=arm64 BUILD_BASE_IMAGE_VERSION=3.7 ./release.sh all push
+  - BUILD_GOARCH=arm64 BUILD_BASE_IMAGE_VERSION=3.7 ./release.sh all push
   when:
     event:
       include:

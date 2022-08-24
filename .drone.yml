@@ -85,6 +85,8 @@ steps:
       from_secret: gitlab_user
     GITLAB_PASS:
       from_secret: gitlab_pass
+    IMAGE_DOMAIN:
+      from_secret: image_domain
     GOOS: linux
     GOARCH: arm64
   commands:
@@ -136,10 +138,7 @@ steps:
     GITLAB_PASS:
       from_secret: gitlab_pass
   commands:
-  - git clone -b $REGION_BRANCH --depth=1 https://$GITLAB_USER:$GITLAB_PASS@git.goodrain.com/goodrain/rainbond.git
-  - ls
-  - rm -rf rainbond/hack
-  - mv region/* rainbond/
+  - git clone -b $REGION_BRANCH --depth=1 https://$GITLAB_USER:$GITLAB_PASS@git.goodrain.com/zhangqh//rainbond.git
 
 - name: build rainbond
   image: rainbond/docker:dind
@@ -158,6 +157,10 @@ steps:
       from_secret: build_version
     DOMESTIC_NAMESPACE:
       from_secret: domestic_namespace
+    DOCKER_USERNAME:
+      from_secret: docker_username
+    DOCKER_PASSWORD:
+      from_secret: docker_passworde
     GOOS: linux
     GOARCH: arm64
   commands:

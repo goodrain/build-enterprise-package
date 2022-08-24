@@ -222,6 +222,8 @@ steps:
       from_secret: domestic_docker_password
     RBD_VER:
       from_secret: build_version
+    IMAGE_DOMAIN:
+      from_secret: image_domain
     DOMESTIC_NAMESPACE:
       from_secret: domestic_namespace
     GOOS: linux

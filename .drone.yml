@@ -88,11 +88,10 @@ steps:
     IMAGE_DOMAIN:
       from_secret: image_domain
     GOOS: linux
-    GOARCH: arm64
   commands:
   - rm -rf rainbond-ui
   - cd rainbond-console-cloud
-  - ./release.sh allinone
+  - VERSION=$VERSION GOARCH=arm64 ./release.sh allinone
   when:
     event:
       include:

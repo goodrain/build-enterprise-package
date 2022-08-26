@@ -154,8 +154,8 @@ EOF
         rbd_offline_image=$(echo "${rbd_image_name}" | awk -F"/" '{print $NF}')
         if [ "${rbd_offline_image}" = "rainbond-operator:${RBD_VER}" ]; then
             docker pull "${rbd_image_name}" || exit 1
-            docker tag "${rbd_image_name}" goodrain.me/rainbond-operator:v2.0.1
-            docker save goodrain.me/rainbond-operator:v2.0.1 -o ./offline/rbd_image/rainbond-operator:v2.0.1.tgz
+            docker tag "${rbd_image_name}" goodrain.me/rainbond-operator:$RBD_VER
+            docker save goodrain.me/rainbond-operator:v2.0.1 -o ./offline/rbd_image/rainbond-operator:$RBD_VER.tgz
         elif [ "${rbd_offline_image}" = "dashboard:v2.0.1" ];then
             docker pull "${rbd_image_name}" || exit 1
             docker tag "${rbd_image_name}" goodrain.me/kubernetes-dashboard:v2.0.1-3

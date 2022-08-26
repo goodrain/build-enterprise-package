@@ -81,7 +81,6 @@ steps:
   commands:
   - sleep 10 # give docker enough time to start
   - cd rainbond-operator
-  - ./
   - docker build --build-arg ARCH=arm64 --build-arg VERSION=$BASE_BUILD_VERSION -t docker.io/zhangsetsail/rainbond-operator:$BUILD_VERSION .
   - docker login $IMAGE_DOMAIN -u "$DOCKER_USERNAME" -p $DOCKER_PASSWORD
   - docker push docker.io/zhangsetsail/rainbond-operator/rainbond-operator:$BUILD_VERSION

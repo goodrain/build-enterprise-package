@@ -26,9 +26,12 @@ steps:
       from_secret: gitlab_user
     GITLAB_PASS:
       from_secret: gitlab_pass
+    OPERATOR_BRANCH:
+      from_secret: operator_branch
   commands:
   - git clone -b $UI_BRANCH --depth=1 https://$GITLAB_USER:$GITLAB_PASS@git.goodrain.com/zhangqh/rainbond-ui-cloud.git
   - git clone -b $CONSOLE_BRANCH --depth=1 https://$GITLAB_USER:$GITLAB_PASS@git.goodrain.com/zhangqh/rainbond-console-cloud.git
+  - git clone -b $OPERATOR_BRANCH --depth=1 https://github.com/goodrain/rainbond-operator.git
 
 - name: build rainbond-ui-cloud dist
   image: node:12
@@ -55,6 +58,22 @@ steps:
   - sleep 10 # give docker enough time to start
   - cd rainbond-ui-cloud
   - docker build --build-arg VERSION=$BASE_BUILD_VERSION -t rainbond/rainbond-ui:$BUILD_VERSION .
+
+- name: build rainbond-operator
+  image: rainbond/docker:dind
+  privileged: true
+  volumes:
+  - name: dockersock
+    path: /var/run
+  environment:
+    BUILD_VERSION:
+      from_secret: build_version
+    BASE_BUILD_VERSION:
+      from_secret: base_build_version
+  commands:
+  - sleep 10 # give docker enough time to start
+  - cd rainbond-operator
+  - docker build --build-arg ARCH=arm64 --build-arg VERSION=$BASE_BUILD_VERSION -t rainbond/rainbond-operator:$BUILD_VERSION .
 
 - name: build rainbond-console
   image: rainbond/docker:dind

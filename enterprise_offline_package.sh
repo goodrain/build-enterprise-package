@@ -191,8 +191,6 @@ EOF
 
 function main() {
     mkdir -p ./offline ./offline/k8s_image ./offline/rbd_image ./offline/chart
-    echo 123$BRANCH
-    echo 123$GITLAB_USER
     git clone -b $BRANCH --depth=1 https://$GITLAB_USER:$GITLAB_PASS@git.goodrain.com/goodrain/rainbond-chart.git ./offline/chart
     # get nfs client package
     get_nfscli

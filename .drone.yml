@@ -261,6 +261,12 @@ steps:
       from_secret: docker_namespace
     DOMESTIC_NAMESPACE:
       from_secret: domestic_namespace
+    GITLAB_USER:
+      from_secret: gitlab_user
+    GITLAB_PASS:
+      from_secret: gitlab_pass
+    BRANCH:
+      from_secret: branch
     GOOS: linux
     GOARCH: arm64
   commands:

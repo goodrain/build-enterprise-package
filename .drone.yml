@@ -19,9 +19,9 @@ steps:
   image: alpine/git
   environment:
     UI_BRANCH:
-      from_secret: ui_branch
+      from_secret: branch
     CONSOLE_BRANCH:
-      from_secret: console_branch
+      from_secret: branch
     GITLAB_USER:
       from_secret: gitlab_user
     GITLAB_PASS:

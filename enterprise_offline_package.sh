@@ -194,7 +194,6 @@ function main() {
     echo 123$BRANCH
     echo 123$GITLAB_USER
     git clone -b $BRANCH --depth=1 https://$GITLAB_USER:$GITLAB_PASS@git.goodrain.com/goodrain/rainbond-chart.git ./offline/chart
-    docker login -u "$DOMESTIC_DOCKER_USERNAME" -p "$DOMESTIC_DOCKER_PASSWORD" "${DOMESTIC_BASE_NAME}"
     # get nfs client package
     get_nfscli
     # get os kernel

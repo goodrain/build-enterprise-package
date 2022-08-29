@@ -54,10 +54,12 @@ steps:
       from_secret: build_version
     BASE_BUILD_VERSION:
       from_secret: base_build_version
+    IMAGE_DOMAIN:
+      from_secret: image_domain
   commands:
   - sleep 10 # give docker enough time to start
   - cd rainbond-ui-cloud
-  - docker build --build-arg VERSION=$BASE_BUILD_VERSION -t rainbond/rainbond-ui:$BUILD_VERSION .
+  - docker build --build-arg VERSION=$BASE_BUILD_VERSION -t $IMAGE_DOMAIN/rainbond-ui:$BUILD_VERSION .
 
 - name: build rainbond-operator
   image: rainbond/docker:dind
@@ -122,7 +124,7 @@ steps:
   commands:
   - rm -rf rainbond-ui
   - cd rainbond-console-cloud
-  - GOARCH=arm64 ./release.sh allinone
+  - BUILD_ARCH=arm64 ./release.sh allinone_arm
   when:
     event:
       include:
@@ -188,6 +190,8 @@ steps:
     DOMESTIC_NAMESPACE:
       from_secret: domestic_namespace
     DOCKER_USERNAME:
+      from_secret: docker_username
+    IMAGE_BASE_NAME:
       from_secret: docker_username
     DOCKER_PASSWORD:
       from_secret: docker_password

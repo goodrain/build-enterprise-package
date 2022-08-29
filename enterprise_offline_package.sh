@@ -193,8 +193,7 @@ function main() {
     
     docker login -u "$DOMESTIC_DOCKER_USERNAME" -p "$DOMESTIC_DOCKER_PASSWORD" "${DOMESTIC_BASE_NAME}"
     mkdir -p ./offline ./offline/k8s_image ./offline/rbd_image ./offline/chart
-    git clone $BRANCH --depth=1 https://$GITLAB_USER:$GITLAB_PASS@git.goodrain.com/goodrain/rainbond-chart.git ./offline/chart
-    helm package ./offline/chart -d ./offline
+    git clone -b $BRANCH --depth=1 https://$GITLAB_USER:$GITLAB_PASS@git.goodrain.com/goodrain/rainbond-chart.git ./offline/chart
     # get nfs client package
     get_nfscli
     # get os kernel

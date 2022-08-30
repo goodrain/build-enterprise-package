@@ -120,6 +120,8 @@ steps:
       from_secret: image_domain
     DOCKER_NAMESPACE:
       from_secret: docker_namespace
+    IMAGE_NAMESPACE:
+      from_secret: docker_namespace
     GOOS: linux
   commands:
   - rm -rf rainbond-ui

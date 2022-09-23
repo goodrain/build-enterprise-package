@@ -19,7 +19,7 @@ jobs:
 
       - name: Pull code and Build the Docker image
         env:
-          VERSION: enterprise-2208
+          VERSION: enterprise-2209
           DISABLE_GOPROXY: true
           IMAGE_BASE_NAME: image.goodrain.com
           DOMESTIC_BASE_NAME: image.goodrain.com

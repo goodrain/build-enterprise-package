@@ -1,0 +1,48 @@
+name: pack-rainbond-offline
+
+on:
+  workflow_dispatch:
+
+jobs:
+  pack-rainbond-offline:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: preparing for mirroring
+        env:
+          BUILDER_VERSION: ${{ secrets.BUILDER_VERSION }}
+          RUNNER_VERSION: ${{ secrets.RUNNER_VERSION }}
+          KANIKO_VERSION: ${{ secrets.KANIKO_VERSION }}
+          RESOURCE_PROXY_VERSION: ${{ secrets.RESOURCE_PROXY_VERSION }}
+          DOMESTIC_BASE_NAME: ${{ secrets.DOMESTIC_BASE_NAME }}
+          DOMESTIC_NAMESPACE: ${{ secrets.DOMESTIC_NAMESPACE }}
+        run: |
+          docker pull ${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/builder:${BUILDER_VERSION}
+          docker pull ${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/runner:${RUNNER_VERSION}
+          docker pull ${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/kaniko-executor:${KANIKO_VERSION}
+          docker pull ${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/resource-proxy:${RESOURCE_PROXY_VERSION}
+      - name: package offline image
+        env:
+          BUILDER_VERSION: ${{ secrets.BUILDER_VERSION }}
+          RUNNER_VERSION: ${{ secrets.RUNNER_VERSION }}
+          KANIKO_VERSION: ${{ secrets.KANIKO_VERSION }}
+          RESOURCE_PROXY_VERSION: ${{ secrets.RESOURCE_PROXY_VERSION }}
+          DOMESTIC_BASE_NAME: ${{ secrets.DOMESTIC_BASE_NAME }}
+          DOMESTIC_NAMESPACE: ${{ secrets.DOMESTIC_NAMESPACE }}
+          VERSION: ${{ secrets.VERSION }}
+        run: |
+          docker save -o rainbond-offline-"${VERSION}".tar \
+          ${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/builder:${BUILDER_VERSION} \
+          ${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/runner:${RUNNER_VERSION} \
+          ${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/kaniko-executor:${KANIKO_VERSION} \
+          ${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/resource-proxy:${RESOURCE_PROXY_VERSION}
+      - name: Setup aliyun oss
+        uses: manyuanrong/setup-ossutil@master
+        with:
+          endpoint: oss-cn-shanghai.aliyuncs.com
+          access-key-id: ${{ secrets.OSS_ACCESS_KEY_ID }}
+          access-key-secret: ${{ secrets.OSS_ACCESS_KEY_SECRET }}
+      - name:  Push to OSS
+        run: ossutil cp -rf rainbond-offline-*.tar oss://rainbond-pkg/offline/5.3-enterprise/
+          

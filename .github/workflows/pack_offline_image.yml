@@ -44,5 +44,5 @@ jobs:
           access-key-id: ${{ secrets.OSS_ACCESS_KEY_ID }}
           access-key-secret: ${{ secrets.OSS_ACCESS_KEY_SECRET }}
       - name:  Push to OSS
-        run: ossutil cp -rf rainbond-offline-*.tar oss://rainbond-pkg/offline/5.3-enterprise/
+        run: ossutil cp -rf rainbond-offline-*.tar oss://rainbond-pkg/offline/5.X/
           

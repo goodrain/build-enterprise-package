@@ -1,0 +1,79 @@
+kind: pipeline
+name: build-offline-arm64
+
+platform:
+  os: linux
+  arch: arm64
+
+trigger:
+  event:
+    include:
+      - custom
+
+node:
+  city: sydney
+
+steps:
+- name: preparing for mirroring and save tar
+  image: rainbond/docker:dind
+  privileged: true
+  volumes:
+    - name: dockersock
+      path: /var/run
+  environment:
+    BUILDER_VERSION:
+      from_secret: builder_version
+    RUNNER_VERSION:
+      from_secret: runner_version
+    KANIKO_VERSION:
+      from_secret: kaniko_version
+    RESOURCE_PROXY_VERSION:
+      from_secret: resource_proxy_version
+    DOMESTIC_BASE_NAME:
+      from_secret: domestic_base_name
+    DOMESTIC_NAMESPACE:
+      from_secret: domestic_namespace
+    VERSION:
+      from_secret: version
+  commands:
+  - sleep 10 # give docker enough time to start
+  - chmod +x test.sh
+  - ./offline_arm.sh
+  when:
+    event:
+      include:
+      - custom
+- name: Setup aliyun oss
+  image: rainbond/docker:dind
+  privileged: true
+  volumes:
+    - name: dockersock
+      path: /var/run
+  environment:
+    AKI:
+      from_secret: aki
+    AKS:
+      from_secret: aks
+    GOOS: linux
+    GOARCH: arm64
+  commands:
+  - sleep 10
+  - wget https://gosspublic.alicdn.com/ossutil/1.7.11/ossutilarm64 && chmod +x ossutilarm64
+  - ./ossutilarm64 config -e oss-cn-shanghai.aliyuncs.com -i $AKI -k $AKS
+  - ./ossutilarm64 cp -rf rainbond-offline-*.tar oss://rainbond-pkg/offline/5.X/
+  when:
+    event:
+      include:
+      - custom
+
+services:
+- name: docker
+  image: docker:dind
+  privileged: true
+  volumes:
+    - name: dockersock
+      path: /var/run
+
+volumes:
+- name: dockersock
+  temp: {}

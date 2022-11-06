@@ -37,7 +37,7 @@ steps:
       from_secret: version
   commands:
   - sleep 10 # give docker enough time to start
-  - chmod +x test.sh
+  - chmod +x offline_arm.sh
   - ./offline_arm.sh
   when:
     event:

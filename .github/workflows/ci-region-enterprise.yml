@@ -26,6 +26,7 @@ jobs:
           BUILD_IMAGE_BASE_NAME: image.goodrain.com
           DOMESTIC_DOCKER_PASSWORD: ${{ secrets.DOMESTIC_DOCKER_PASSWORD }}
           DOMESTIC_DOCKER_USERNAME: ${{ secrets.DOMESTIC_DOCKER_USERNAME }}
+          DOCKER_USERNAME: ""
         run: |
           git clone -b enterprise-2022 https://${{ secrets.GITLAB_USER }}:"${{ secrets.GITLAB_PASSWORD }}"@git.goodrain.com/goodrain/rainbond.git
           cd rainbond

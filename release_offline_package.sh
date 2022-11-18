@@ -76,19 +76,19 @@ function get_command_line_tools() {
 function get_k8s_images() {
 
     cat >./offline/k8s_image/list.txt <<EOF
-registry.cn-hangzhou.aliyuncs.com/goodrain/coreos-etcd:v3.4.13-rke
-registry.cn-hangzhou.aliyuncs.com/goodrain/rke-tools:v0.1.68
-registry.cn-hangzhou.aliyuncs.com/goodrain/cluster-proportional-autoscaler:1.8.1
-registry.cn-hangzhou.aliyuncs.com/goodrain/coredns-coredns:1.7.0
-registry.cn-hangzhou.aliyuncs.com/goodrain/k8s-dns-node-cache:1.15.13
-registry.cn-hangzhou.aliyuncs.com/goodrain/hyperkube:v1.19.6-rke
-registry.cn-hangzhou.aliyuncs.com/goodrain/coreos-flannel:v0.13.0-rke
-registry.cn-hangzhou.aliyuncs.com/goodrain/flannel-cni:v0.3.0-rke
-registry.cn-hangzhou.aliyuncs.com/goodrain/pause:3.2
-registry.cn-hangzhou.aliyuncs.com/goodrain/metrics-server:v0.3.6
-rancher/k8s-dns-kube-dns:1.15.10
-rancher/k8s-dns-dnsmasq-nanny:1.15.10
-rancher/k8s-dns-sidecar:1.15.10
+registry.cn-hangzhou.aliyuncs.com/goodrain/mirrored-coreos-etcd:v3.5.3
+registry.cn-hangzhou.aliyuncs.com/goodrain/rke-tools:v0.1.87
+registry.cn-hangzhou.aliyuncs.com/goodrain/mirrored-cluster-proportional-autoscaler:1.8.5
+registry.cn-hangzhou.aliyuncs.com/goodrain/mirrored-coredns-coredns:1.9.0
+registry.cn-hangzhou.aliyuncs.com/goodrain/mirrored-k8s-dns-node-cache:1.21.1
+registry.cn-hangzhou.aliyuncs.com/goodrain/hyperkube:v1.23.10-rancher1
+registry.cn-hangzhou.aliyuncs.com/goodrain/mirrored-coreos-flannel:v0.15.1
+registry.cn-hangzhou.aliyuncs.com/goodrain/flannel-cni:v0.3.0-rancher6
+registry.cn-hangzhou.aliyuncs.com/goodrain/mirrored-pause:3.6
+registry.cn-hangzhou.aliyuncs.com/goodrain/mirrored-metrics-server:v0.6.1
+rancher/mirrored-k8s-dns-kube-dns:1.21.1
+rancher/mirrored-k8s-dns-dnsmasq-nanny:1.21.1
+rancher/mirrored-k8s-dns-sidecar:1.21.1
 EOF
 
     while read k8s_image_name; do
@@ -127,7 +127,7 @@ registry.cn-hangzhou.aliyuncs.com/goodrain/builder:v5.6.0
 registry.cn-hangzhou.aliyuncs.com/goodrain/runner:v5.6.0
 registry.cn-hangzhou.aliyuncs.com/goodrain/rainbond-operator:v2.3.0
 registry.cn-hangzhou.aliyuncs.com/goodrain/plugins-tcm:5.1.7
-registry.cn-hangzhou.aliyuncs.com/goodrain/kubernetes-dashboard:v2.0.1-3
+registry.cn-hangzhou.aliyuncs.com/goodrain/kubernetes-dashboard:v2.6.1
 registry.cn-hangzhou.aliyuncs.com/goodrain/nfs-provisioner:latest
 registry.cn-hangzhou.aliyuncs.com/goodrain/rbd-db:8.0.19
 registry.cn-hangzhou.aliyuncs.com/goodrain/metrics-scraper:v1.0.4

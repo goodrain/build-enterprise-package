@@ -19,7 +19,7 @@ jobs:
 
       - name: Pull code and Build the Docker image
         env:
-          VERSION: enterprise-2211
+          VERSION: enterprise-2211-gitee
           DISABLE_GOPROXY: true
           IMAGE_BASE_NAME: image.goodrain.com
           DOMESTIC_BASE_NAME: image.goodrain.com

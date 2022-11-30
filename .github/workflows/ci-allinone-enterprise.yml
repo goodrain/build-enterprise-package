@@ -16,6 +16,7 @@ jobs:
         env:
           VERSION: enterprise-2211-gitee
           ALLINONE: true
+          ROUTE_MODE: history
           TRAVIS_PULL_REQUEST: false
           DOMESTIC_BASE_NAME: image.goodrain.com
           BUILD_IMAGE_BASE_NAME: image.goodrain.com

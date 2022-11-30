@@ -36,7 +36,7 @@ steps:
     VERSION:
       from_secret: version
   commands:
-  - sleep 10 # give docker enough time to start
+  - sleep 30 # give docker enough time to start
   - chmod +x offline_arm.sh
   - ./offline_arm.sh
   when:
@@ -57,7 +57,7 @@ steps:
     GOOS: linux
     GOARCH: arm64
   commands:
-  - sleep 10
+  - sleep 30
   - wget https://gosspublic.alicdn.com/ossutil/1.7.11/ossutilarm64 && chmod +x ossutilarm64
   - ./ossutilarm64 config -e oss-cn-shanghai.aliyuncs.com -i $AKI -k $AKS
   - ./ossutilarm64 cp -rf rainbond-offline-*.tar oss://rainbond-pkg/offline/5.X/

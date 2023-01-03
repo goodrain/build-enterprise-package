@@ -17,11 +17,13 @@ jobs:
           RESOURCE_PROXY_VERSION: ${{ secrets.RESOURCE_PROXY_VERSION }}
           DOMESTIC_BASE_NAME: ${{ secrets.DOMESTIC_BASE_NAME }}
           DOMESTIC_NAMESPACE: ${{ secrets.DOMESTIC_NAMESPACE }}
+          CLOUD_SHELL_VERSION: ${{ secrets.CLOUD_SHELL_VERSION }}
         run: |
           docker pull ${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/builder:${BUILDER_VERSION}
           docker pull ${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/runner:${RUNNER_VERSION}
           docker pull ${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/kaniko-executor:${KANIKO_VERSION}
           docker pull ${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/resource-proxy:${RESOURCE_PROXY_VERSION}
+          docker pull ${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-shell:${CLOUD_SHELL_VERSION}
       - name: package offline image
         env:
           BUILDER_VERSION: ${{ secrets.BUILDER_VERSION }}
@@ -30,6 +32,7 @@ jobs:
           RESOURCE_PROXY_VERSION: ${{ secrets.RESOURCE_PROXY_VERSION }}
           DOMESTIC_BASE_NAME: ${{ secrets.DOMESTIC_BASE_NAME }}
           DOMESTIC_NAMESPACE: ${{ secrets.DOMESTIC_NAMESPACE }}
+          CLOUD_SHELL_VERSION: ${{ secrets.CLOUD_SHELL_VERSION }}
           VERSION: ${{ secrets.VERSION }}
         run: |
           docker save -o rainbond-offline-"${VERSION}".tar \
@@ -37,6 +40,7 @@ jobs:
           ${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/runner:${RUNNER_VERSION} \
           ${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/kaniko-executor:${KANIKO_VERSION} \
           ${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/resource-proxy:${RESOURCE_PROXY_VERSION}
+          ${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-shell:${CLOUD_SHELL_VERSION}
       - name: Setup aliyun oss
         uses: manyuanrong/setup-ossutil@master
         with:

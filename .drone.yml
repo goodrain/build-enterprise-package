@@ -34,7 +34,7 @@ steps:
   - git clone -b $OPERATOR_BRANCH --depth=1 https://ghproxy.com/https://github.com/goodrain/rainbond-operator.git
 
 - name: build rainbond-ui-cloud dist
-  image: node:12
+  image: node:14
   environment:
     ALLINONE: true
   commands:

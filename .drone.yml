@@ -83,9 +83,9 @@ steps:
   commands:
   - sleep 10 # give docker enough time to start
   - cd rainbond-operator
-  - docker build --build-arg ARCH=arm64 --build-arg VERSION=$BASE_BUILD_VERSION -t $IMAGE_DOMAIN/rainbond-operator:$BUILD_VERSION .
+  - docker build --build-arg ARCH=arm64 --build-arg VERSION=$BASE_BUILD_VERSION -t $IMAGE_DOMAIN/rainbond/rainbond-operator:$BUILD_VERSION .
   - docker login $IMAGE_DOMAIN -u "$DOCKER_USERNAME" -p $DOCKER_PASSWORD
-  - docker push $IMAGE_DOMAIN/rainbond-operator:$BUILD_VERSION
+  - docker push $IMAGE_DOMAIN/rainbond/rainbond-operator:$BUILD_VERSION
 
 - name: build rainbond-console
   image: rainbond/docker:dind

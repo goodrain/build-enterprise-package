@@ -181,19 +181,9 @@ steps:
   - name: dockersock
     path: /var/run
   environment:
-    DOMESTIC_BASE_NAME:
-      from_secret: domestic_base_name
-    DOMESTIC_DOCKER_USERNAME:
-      from_secret: domestic_docker_username
-    DOMESTIC_DOCKER_PASSWORD:
-      from_secret: domestic_docker_password
     VERSION:
       from_secret: build_version
-    DOMESTIC_NAMESPACE:
-      from_secret: domestic_namespace
     DOCKER_USERNAME:
-      from_secret: docker_username
-    IMAGE_BASE_NAME:
       from_secret: docker_username
     DOCKER_PASSWORD:
       from_secret: docker_password

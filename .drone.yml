@@ -248,11 +248,7 @@ steps:
     DOCKER_PASSWORD:
       from_secret: docker_password
   commands:
-  - docker login image.goodrain.com -u "$DOMESTIC_DOCKER_USERNAME" -p $DOMESTIC_DOCKER_PASSWORD
-  when:
-    event:
-      include:
-      - custom
+  - docker login image.goodrain.com -u "$DOCKER_USERNAME" -p $DOCKER_PASSWORD
       
 - name: build rainbond package
   image: rainbond/docker:dind

@@ -236,6 +236,24 @@ node:
   city: sydney
 
 steps:
+- name: login
+  image: rainbond/docker:dind
+  privileged: true
+  volumes:
+  - name: dockersock
+    path: /var/run
+  environment:
+    DOCKER_USERNAME:
+      from_secret: docker_username
+    DOCKER_PASSWORD:
+      from_secret: docker_password
+  commands:
+  - docker login image.goodrain.com -u "$DOMESTIC_DOCKER_USERNAME" -p $DOMESTIC_DOCKER_PASSWORD
+  when:
+    event:
+      include:
+      - custom
+      
 - name: build rainbond package
   image: rainbond/docker:dind
   privileged: true

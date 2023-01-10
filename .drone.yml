@@ -235,21 +235,7 @@ trigger:
 node:
   city: sydney
 
-steps:
-- name: login
-  image: rainbond/docker:dind
-  privileged: true
-  volumes:
-  - name: dockersock
-    path: /var/run
-  environment:
-    DOCKER_USERNAME:
-      from_secret: docker_username
-    DOCKER_PASSWORD:
-      from_secret: docker_password
-  commands:
-  - docker login image.goodrain.com -u "$DOCKER_USERNAME" -p $DOCKER_PASSWORD
-      
+steps:    
 - name: build rainbond package
   image: rainbond/docker:dind
   privileged: true
@@ -275,11 +261,16 @@ steps:
       from_secret: gitlab_user
     GITLAB_PASS:
       from_secret: gitlab_pass
+    DOCKER_USERNAME:
+      from_secret: docker_username
+    DOCKER_PASSWORD:
+      from_secret: docker_password
     BRANCH:
       from_secret: branch
     GOOS: linux
     GOARCH: arm64
   commands:
+  - docker login image.goodrain.com -u "$DOCKER_USERNAME" -p $DOCKER_PASSWORD
   - sleep 10 # give docker enough time to start
   - chmod +x enterprise_offline_package.sh
   - ./enterprise_offline_package.sh

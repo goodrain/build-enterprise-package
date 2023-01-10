@@ -72,10 +72,10 @@ steps:
       from_secret: build_version
     BASE_BUILD_VERSION:
       from_secret: base_build_version
-    DOCKER_USERNAME:
-      from_secret: docker_username
-    DOCKER_PASSWORD:
-      from_secret: docker_password
+    DOMESTIC_DOCKER_USERNAME:
+      from_secret: domestic_docker_username
+    DOMESTIC_DOCKER_PASSWORD:
+      from_secret: domestic_docker_password
     IMAGE_DOMAIN:
       from_secret: image_domain
     DOCKER_NAMESPACE:
@@ -83,9 +83,9 @@ steps:
   commands:
   - sleep 10 # give docker enough time to start
   - cd rainbond-operator
-  - docker build --build-arg ARCH=arm64 --build-arg VERSION=$BASE_BUILD_VERSION -t $IMAGE_DOMAIN/rainbond/rainbond-operator:$BUILD_VERSION .
-  - docker login $IMAGE_DOMAIN -u "$DOCKER_USERNAME" -p $DOCKER_PASSWORD
-  - docker push $IMAGE_DOMAIN/rainbond/rainbond-operator:$BUILD_VERSION
+  - docker build --build-arg ARCH=arm64 --build-arg VERSION=$BASE_BUILD_VERSION -t registry.cn-hangzhou.aliyuncs.com/goodrain/rainbond-operator:$BUILD_VERSION .
+  - docker login registry.cn-hangzhou.aliyuncs.com -u "$DOMESTIC_DOCKER_USERNAME" -p $DOMESTIC_DOCKER_PASSWORD
+  - docker push registry.cn-hangzhou.aliyuncs.com/goodrain/rainbond-operator:$BUILD_VERSION
 
 - name: build rainbond-console
   image: rainbond/docker:dind

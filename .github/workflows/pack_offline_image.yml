@@ -25,8 +25,8 @@ jobs:
           docker pull ${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/kaniko-executor:${KANIKO_VERSION}
           docker pull ${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/resource-proxy:${RESOURCE_PROXY_VERSION}
           docker pull ${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-shell:${CLOUD_SHELL_VERSION}
-          docker pull ${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-mesh-data-panel:${VERSION}
-          docker pull ${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-init-probe:${VERSION}
+          docker pull ${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-mesh-data-panel:"${VERSION}"-release
+          docker pull ${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-init-probe:"${VERSION}"-release
           
       - name: package offline image
         env:
@@ -45,8 +45,8 @@ jobs:
           ${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/kaniko-executor:${KANIKO_VERSION} \
           ${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/resource-proxy:${RESOURCE_PROXY_VERSION} \
           ${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-shell:${CLOUD_SHELL_VERSION} \
-          ${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-mesh-data-panel:${VERSION} \
-          ${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-init-probe:${VERSION}
+          ${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-mesh-data-panel:"${VERSION}"-release \
+          ${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-init-probe:"${VERSION}"-release
       - name: Setup aliyun oss
         uses: manyuanrong/setup-ossutil@master
         with:

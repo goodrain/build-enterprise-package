@@ -11,10 +11,12 @@ VERSION=${VERSION:-'v5.8.1-arm'}
 offline_tar_list="${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/builder:${BUILDER_VERSION}
 ${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/runner:${RUNNER_VERSION}
 ${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/kaniko-executor:${KANIKO_VERSION}
-${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/resource-proxy:${RESOURCE_PROXY_VERSION}"
+${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/resource-proxy:${RESOURCE_PROXY_VERSION}
+${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-init-probe:${VERSION}-release
+${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-mesh-data-panel:${VERSION}-release"
 
 for image in ${offline_tar_list}; do
     docker pull "${image}"
 done
 
-docker save -o rainbond-offline-"${VERSION}".tar ${offline_tar_list}
+docker save -o rainbond-offline-"${VERSION}"-arm64.tar ${offline_tar_list}

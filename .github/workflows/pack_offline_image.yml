@@ -39,7 +39,7 @@ jobs:
           ${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/builder:${BUILDER_VERSION} \
           ${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/runner:${RUNNER_VERSION} \
           ${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/kaniko-executor:${KANIKO_VERSION} \
-          ${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/resource-proxy:${RESOURCE_PROXY_VERSION}
+          ${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/resource-proxy:${RESOURCE_PROXY_VERSION} \
           ${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/rbd-shell:${CLOUD_SHELL_VERSION}
       - name: Setup aliyun oss
         uses: manyuanrong/setup-ossutil@master

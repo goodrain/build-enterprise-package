@@ -33,6 +33,8 @@ steps:
       from_secret: domestic_base_name
     DOMESTIC_NAMESPACE:
       from_secret: domestic_namespace
+    CLOUD_SHELL_VERSION:
+      from_secret: cloud_shell_version
     VERSION:
       from_secret: version
   commands:

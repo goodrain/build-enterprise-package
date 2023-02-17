@@ -14,7 +14,7 @@ jobs:
         
       - name: Pull code and Build ui image
         env:
-          VERSION: enterprise-2023
+          VERSION: enterprise-2302
           ALLINONE: true
           ROUTE_MODE: history
           TRAVIS_PULL_REQUEST: false
@@ -49,7 +49,7 @@ jobs:
         
       - name: Pull code and Build allinone image
         env:
-          VERSION: enterprise-2023
+          VERSION: enterprise-2302
           TRAVIS_PULL_REQUEST: false
           DOMESTIC_BASE_NAME: image.goodrain.com
           DOMESTIC_NAMESPACE: goodrain

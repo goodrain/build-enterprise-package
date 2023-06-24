@@ -14,7 +14,7 @@ jobs:
         
       - name: Pull code and Build ui image
         env:
-          VERSION: enterprise-2304
+          VERSION: enterprise-2306
           ALLINONE: true
           ROUTE_MODE: history
           TRAVIS_PULL_REQUEST: false
@@ -23,7 +23,7 @@ jobs:
           DOMESTIC_DOCKER_PASSWORD: ${{ secrets.DOMESTIC_DOCKER_PASSWORD }}
           DOMESTIC_DOCKER_USERNAME: ${{ secrets.DOMESTIC_DOCKER_USERNAME }}
         run: |
-          git clone -b enterprise-2304 https://${{ secrets.GITLAB_USER }}:"${{ secrets.GITLAB_PASSWORD }}"@git.goodrain.com/goodrain/rainbond-ui-cloud.git
+          git clone -b enterprise-2306 https://${{ secrets.GITLAB_USER }}:"${{ secrets.GITLAB_PASSWORD }}"@git.goodrain.com/goodrain/rainbond-ui-cloud.git
           cd rainbond-ui-cloud
           chmod +x ./build.sh
           ./build.sh
@@ -49,7 +49,7 @@ jobs:
         
       - name: Pull code and Build allinone image
         env:
-          VERSION: enterprise-2304
+          VERSION: enterprise-2306
           TRAVIS_PULL_REQUEST: false
           DOMESTIC_BASE_NAME: image.goodrain.com
           DOMESTIC_NAMESPACE: goodrain
@@ -57,7 +57,7 @@ jobs:
           DOMESTIC_DOCKER_PASSWORD: ${{ secrets.DOMESTIC_DOCKER_PASSWORD }}
           DOMESTIC_DOCKER_USERNAME: ${{ secrets.DOMESTIC_DOCKER_USERNAME }}
         run: |
-          git clone -b enterprise-2304 https://${{ secrets.GITLAB_USER }}:"${{ secrets.GITLAB_PASSWORD }}"@git.goodrain.com/goodrain/rainbond-console-cloud.git
+          git clone -b enterprise-2306 https://${{ secrets.GITLAB_USER }}:"${{ secrets.GITLAB_PASSWORD }}"@git.goodrain.com/goodrain/rainbond-console-cloud.git
           cd rainbond-console-cloud
           chmod +x  ./release.sh
           ./release.sh allinone

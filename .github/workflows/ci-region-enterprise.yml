@@ -19,7 +19,7 @@ jobs:
 
       - name: Pull code and Build the Docker image
         env:
-          VERSION: enterprise-2304
+          VERSION: enterprise-2306
           DISABLE_GOPROXY: true
           IMAGE_BASE_NAME: image.goodrain.com
           DOMESTIC_BASE_NAME: image.goodrain.com
@@ -28,7 +28,7 @@ jobs:
           DOMESTIC_DOCKER_USERNAME: ${{ secrets.DOMESTIC_DOCKER_USERNAME }}
           DOCKER_USERNAME: ""
         run: |
-          git clone -b enterprise-2304 https://${{ secrets.GITLAB_USER }}:"${{ secrets.GITLAB_PASSWORD }}"@git.goodrain.com/goodrain/rainbond.git
+          git clone -b enterprise-2306 https://${{ secrets.GITLAB_USER }}:"${{ secrets.GITLAB_PASSWORD }}"@git.goodrain.com/goodrain/rainbond.git
           cd rainbond
           chmod +x ./release.sh
           ./release.sh all push

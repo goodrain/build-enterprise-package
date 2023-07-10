@@ -1,16 +1,17 @@
 #!/bin/bash
 
 DOCKER_VERSION=${VERSION:-"20.10.9"}
-RBD_VER=${RBD_VER:-'enterprise-2211-gitee'}
 
 function download_offline_package () {
     if [ $(arch) == "x86_64" ] || [ $(arch) == "amd64" ]; then
+        export RBD_VER=${RBD_VER}
         wget https://pkg.rainbond.com/offline/nfs-client/nfs_all.tar.gz -O ./offline/nfs_all.tar.gz
         wget https://pkg.rainbond.com/offline/docker/docker-${DOCKER_VER}.tgz -O ./offline/docker-${DOCKER_VER}.tgz
         wget https://pkg.goodrain.com/pkg/kubectl/v1.23.10/kubectl -O ./offline/kubectl
         wget https://pkg.goodrain.com/pkg/helm/v3.10.1/helm -O ./offline/helm
         wget https://pkg.goodrain.com/pkg/rke/v1.3.15/rke -O ./offline/rke
     elif [ $(arch) == "aarch64" ] || [ $(arch) == "arm64" ]; then
+        export RBD_VER=${RBD_VER}-arm
         wget https://pkg.rainbond.com/offline/nfs-client/nfs_all_arm.tar.gz -O ./offline/nfs_all.tar.gz
         wget https://pkg.rainbond.com/offline/docker/docker-${DOCKER_VER}.tgz -O ./offline/docker-arm-${DOCKER_VER}.tgz
         wget https://pkg.goodrain.com/pkg/kubectl/v1.23.10/kubectl-arm -O ./offline/kubectl
@@ -54,14 +55,13 @@ rancher/mirrored-k8s-dns-sidecar:1.21.1"
         
         docker pull ${images} ||  exit 1
         docker tag ${images} goodrain.me/${k8s_offline_image}
-        docker save goodrain.me/${k8s_offline_image} -o ./offline/k8s_image/${k8s_offline_image}.tgz
+        docker save goodrain.me/${k8s_offline_image} -o ./offline/k8s_image/${k8s_image_tar}.tgz
     done
 }
 
 function get_rbd_images() {
 
-    cat >./offline/rbd_image/list.txt <<EOF
-image.goodrain.com/goodrain/rainbond:$RBD_VER-allinone
+image_list="image.goodrain.com/goodrain/rainbond:$RBD_VER-allinone
 image.goodrain.com/goodrain/rbd-node:$RBD_VER
 image.goodrain.com/goodrain/rbd-resource-proxy:$RBD_VER
 image.goodrain.com/goodrain/rbd-eventlog:$RBD_VER
@@ -78,29 +78,22 @@ image.goodrain.com/goodrain/rbd-grctl:$RBD_VER
 registry.cn-hangzhou.aliyuncs.com/goodrain/builder:latest
 registry.cn-hangzhou.aliyuncs.com/goodrain/runner:latest
 registry.cn-hangzhou.aliyuncs.com/goodrain/rainbond-operator:$RBD_VER
-registry.cn-hangzhou.aliyuncs.com/goodrain/plugins-tcm:5.1.7
-registry.cn-hangzhou.aliyuncs.com/goodrain/kubernetes-dashboard:v2.6.1
 registry.cn-hangzhou.aliyuncs.com/goodrain/nfs-provisioner:latest
-registry.cn-hangzhou.aliyuncs.com/goodrain/rbd-db:8.0.19
-registry.cn-hangzhou.aliyuncs.com/goodrain/metrics-scraper:v1.0.4
-registry.cn-hangzhou.aliyuncs.com/goodrain/etcd:v3.3.18
-registry.cn-hangzhou.aliyuncs.com/goodrain/mysqld-exporter:latest
-registry.cn-hangzhou.aliyuncs.com/goodrain/registry:2.6.2
-registry.cn-hangzhou.aliyuncs.com/goodrain/smallimage:latest
-EOF
-    while read rbd_image_name; do
-        rbd_image_tar=$(echo ${rbd_image_name} | awk -F"/" '{print $NF}' | tr : -)
-        rbd_offline_image=$(echo ${rbd_image_name} | awk -F"/" '{print $NF}')
+rainbond/rbd-db:8.0
+rainbond/mysqld-exporter:latest
+rainbond/kubernetes-dashboard:v2.6.1
+rainbond/metrics-scraper:v1.0.4
+rainbond/etcd:v3.3.18
+rainbond/registry:2.6.2"
+    
+    for images in ${image_list}; do
+        rbd_image_tar=$(echo ${images} | awk -F"/" '{print $NF}' | tr : -)
+        rbd_offline_image=$(echo ${images} | awk -F"/" '{print $NF}')
 
-        if [[ -f "./offline/rbd_image/${rbd_image_tar}.tgz" ]]; then
-            echo "[INFO] ${rbd_image_tar} image already existed"
-        else
-            docker pull ${rbd_image_name} || exit 1
-            docker tag ${rbd_image_name} goodrain.me/${rbd_offline_image}
-            docker save goodrain.me/${rbd_offline_image} -o ./offline/rbd_image/${rbd_offline_image}.tgz
-        fi
-    done <./offline/rbd_image/list.txt
-
+        docker pull ${images} || exit 1
+        docker tag ${images} goodrain.me/${rbd_offline_image}
+        docker save goodrain.me/${rbd_offline_image} -o ./offline/rbd_image/${rbd_image_tar}.tgz
+    done
 }
 
 function main() {

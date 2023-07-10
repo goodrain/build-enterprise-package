@@ -18,6 +18,8 @@ steps:
 - name: clone rainbond-ui-cloud
   image: alpine/git
   environment:
+    BRANCH:
+      from_secret: branch
     VERSION:
       from_secret: version
     GITLAB_USER:
@@ -27,8 +29,8 @@ steps:
     OPERATOR_BRANCH:
       from_secret: operator_branch
   commands:
-  - git clone -b $VERSION--depth=1 https://$GITLAB_USER:$GITLAB_PASS@git.goodrain.com/goodrain/rainbond-ui-cloud.git
-  - git clone -b $VERSION --depth=1 https://$GITLAB_USER:$GITLAB_PASS@git.goodrain.com/goodrain/rainbond-console-cloud.git
+  - git clone -b $BRANCH--depth=1 https://$GITLAB_USER:$GITLAB_PASS@git.goodrain.com/goodrain/rainbond-ui-cloud.git
+  - git clone -b $BRANCH --depth=1 https://$GITLAB_USER:$GITLAB_PASS@git.goodrain.com/goodrain/rainbond-console-cloud.git
   - git clone -b $OPERATOR_BRANCH --depth=1 https://ghproxy.com/https://github.com/goodrain/rainbond-operator.git
 
 - name: build rainbond-ui-cloud dist

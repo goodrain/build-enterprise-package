@@ -52,14 +52,10 @@ steps:
   environment:
     VERSION:
       from_secret: version
-    IMAGE_NAMESPACE:
-      from_secret: image_namespace
-    IMAGE_DOMAIN:
-      from_secret: image_namespace
   commands:
   - sleep 10 # give docker enough time to start
   - cd rainbond-ui-cloud
-  - docker build -t $IMAGE_NAMESPACE/rainbond-ui:$VERSION .
+  - docker build -t goodrain/rainbond-ui:$VERSION .
 
 - name: build rainbond-operator
   image: rainbond/docker:dind

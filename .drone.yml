@@ -54,6 +54,8 @@ steps:
       from_secret: version
     IMAGE_NAMESPACE:
       from_secret: image_namespace
+    IMAGE_DOMAIN:
+      from_secret: image_namespace
   commands:
   - sleep 10 # give docker enough time to start
   - cd rainbond-ui-cloud

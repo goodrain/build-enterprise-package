@@ -9,11 +9,13 @@ function download_offline_package () {
         wget https://pkg.rainbond.com/offline/docker/docker-${DOCKER_VER}.tgz -O ./offline/docker-${DOCKER_VER}.tgz
         wget https://pkg.goodrain.com/pkg/kubectl/v1.23.10/kubectl -O ./offline/kubectl
         wget https://pkg.goodrain.com/pkg/helm/v3.10.1/helm -O ./offline/helm
+        wget https://pkg.goodrain.com/pkg/rke/v1.3.15/rke -O ./offline/rke
     elif [ $(arch) == "aarch64" ] || [ $(arch) == "arm64" ]; then
         wget https://pkg.rainbond.com/offline/nfs-client/nfs_all_arm.tar.gz -O ./offline/nfs_all.tar.gz
         wget https://pkg.rainbond.com/offline/docker/docker-${DOCKER_VER}.tgz -O ./offline/docker-arm-${DOCKER_VER}.tgz
         wget https://pkg.goodrain.com/pkg/kubectl/v1.23.10/kubectl-arm -O ./offline/kubectl
         wget https://pkg.goodrain.com/pkg/helm/v3.10.1/helm-arm64 -O ./offline/helm
+        wget https://pkg.goodrain.com/pkg/rke/v1.3.15/rke-arm -O ./offline/rke
     fi
     
     wget https://get.rainbond.com/install_docker_offline.sh -O ./offline/install_docker_offline.sh
@@ -25,41 +27,35 @@ function download_offline_package () {
     chmod +x ./offline/linux-optimize.sh
     chmod +x ./offline/kubectl
     chmod +x ./offline/helm
+    chmod +x ./offline/rke
     
     wget https://pkg.rainbond.com/offline/os-kernel/kernel_upgrade.tgz -O ./offline/kernel_upgrade.tgz
 }
 
 function get_k8s_images() {
 
-    cat >./offline/k8s_image/list.txt <<EOF
-registry.cn-hangzhou.aliyuncs.com/goodrain/mirrored-coreos-etcd:v3.5.3
-registry.cn-hangzhou.aliyuncs.com/goodrain/rke-tools:v0.1.87
-registry.cn-hangzhou.aliyuncs.com/goodrain/mirrored-cluster-proportional-autoscaler:1.8.5
-registry.cn-hangzhou.aliyuncs.com/goodrain/mirrored-coredns-coredns:1.9.0
-registry.cn-hangzhou.aliyuncs.com/goodrain/mirrored-k8s-dns-node-cache:1.21.1
-registry.cn-hangzhou.aliyuncs.com/goodrain/hyperkube:v1.23.10-rancher1
-registry.cn-hangzhou.aliyuncs.com/goodrain/mirrored-coreos-flannel:v0.15.1
-registry.cn-hangzhou.aliyuncs.com/goodrain/flannel-cni:v0.3.0-rancher6
-registry.cn-hangzhou.aliyuncs.com/goodrain/mirrored-pause:3.6
-registry.cn-hangzhou.aliyuncs.com/goodrain/mirrored-metrics-server:v0.6.1
+image_list="rancher/mirrored-coreos-etcd:v3.5.3
+rancher/rke-tools:v0.1.87
+rancher/cluster-proportional-autoscaler:1.8.1
+rancher/mirrored-coredns-coredns:1.10.1
+rancher/mirrored-k8s-dns-node-cache:1.21.1
+rancher/hyperkube:v1.23.10-rancher1
+rancher/mirrored-coreos-flannel:v0.15.1
+rancher/flannel-cni:v0.3.0-rancher6
+rancher/mirrored-pause:3.6
+rancher/mirrored-metrics-server:v0.6.1
 rancher/mirrored-k8s-dns-kube-dns:1.21.1
 rancher/mirrored-k8s-dns-dnsmasq-nanny:1.21.1
-rancher/mirrored-k8s-dns-sidecar:1.21.1
-EOF
+rancher/mirrored-k8s-dns-sidecar:1.21.1"
 
-    while read k8s_image_name; do
-        k8s_image_tar=$(echo ${k8s_image_name} | awk -F"/" '{print $NF}' | tr : -)
-        k8s_offline_image=$(echo ${k8s_image_name} | awk -F"/" '{print $NF}')
-
-        if [[ -f "./offline/k8s_image/${k8s_image_tar}.tgz" ]]; then
-            echo "[INFO] ${k8s_image_tar} image already existed"
-        else
-            docker pull ${k8s_image_name} ||  exit 1
-            docker tag ${k8s_image_name} goodrain.me/${k8s_offline_image}
-            docker save goodrain.me/${k8s_offline_image} -o ./offline/k8s_image/${k8s_offline_image}.tgz
-        fi
-    done <./offline/k8s_image/list.txt
-
+    for images in ${image_list}; do
+        k8s_image_tar=$(echo ${images} | awk -F"/" '{print $NF}' | tr : -)
+        k8s_offline_image=$(echo ${images} | awk -F"/" '{print $NF}')
+        
+        docker pull ${images} ||  exit 1
+        docker tag ${images} goodrain.me/${k8s_offline_image}
+        docker save goodrain.me/${k8s_offline_image} -o ./offline/k8s_image/${k8s_offline_image}.tgz
+    done
 }
 
 function get_rbd_images() {

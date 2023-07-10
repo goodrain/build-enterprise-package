@@ -8,10 +8,12 @@ function download_offline_package () {
         wget https://pkg.rainbond.com/offline/nfs-client/nfs_all.tar.gz -O ./offline/nfs_all.tar.gz
         wget https://pkg.rainbond.com/offline/docker/docker-${DOCKER_VER}.tgz -O ./offline/docker-${DOCKER_VER}.tgz
         wget https://pkg.goodrain.com/pkg/kubectl/v1.23.10/kubectl -O ./offline/kubectl
+        wget https://pkg.goodrain.com/pkg/helm/v3.10.1/helm -O ./offline/helm
     elif [ $(arch) == "aarch64" ] || [ $(arch) == "arm64" ]; then
         wget https://pkg.rainbond.com/offline/nfs-client/nfs_all_arm.tar.gz -O ./offline/nfs_all.tar.gz
         wget https://pkg.rainbond.com/offline/docker/docker-${DOCKER_VER}.tgz -O ./offline/docker-arm-${DOCKER_VER}.tgz
         wget https://pkg.goodrain.com/pkg/kubectl/v1.23.10/kubectl-arm -O ./offline/kubectl
+        wget https://pkg.goodrain.com/pkg/helm/v3.10.1/helm-arm64 -O ./offline/helm
     fi
     
     wget https://get.rainbond.com/install_docker_offline.sh -O ./offline/install_docker_offline.sh
@@ -22,6 +24,7 @@ function download_offline_package () {
     chmod +x ./offline/install_docker_offline.sh
     chmod +x ./offline/linux-optimize.sh
     chmod +x ./offline/kubectl
+    chmod +x ./offline/helm
     
     wget https://pkg.rainbond.com/offline/os-kernel/kernel_upgrade.tgz -O ./offline/kernel_upgrade.tgz
 }

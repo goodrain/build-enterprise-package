@@ -270,7 +270,7 @@ steps:
     GOOS: linux
     GOARCH: arm64
   commands:
-  - docker login image.goodrain.com -u "$DOCKER_USERNAME" -p $DOCKER_PASSWORD
+  - docker login image.goodrain.com -u "$DOMESTIC_DOCKER_USERNAME" -p $DOMESTIC_DOCKER_PASSWORD
   - sleep 10 # give docker enough time to start
   - chmod +x enterprise_offline_package.sh
   - ./enterprise_offline_package.sh

@@ -47,7 +47,7 @@ steps:
   commands:
   - sleep 10 # give docker enough time to start
   - cd rainbond-ui-cloud
-  - docker build -t ${IMAGE_DOMAIN}/${IMAGE_NAMESPACE}/rainbond-ui:$VERSION .
+  - docker build -t $IMAGE_DOMAIN/$IMAGE_NAMESPACE/rainbond-ui:$VERSION .
 
 - name: build rainbond-console
   image: rainbond/docker:dind
@@ -116,9 +116,9 @@ steps:
   commands:
   - sleep 10 # give docker enough time to start
   - cd rainbond-operator
-  - docker build --build-arg ARCH=arm64 -t ${IMAGE_DOMAIN}/${IMAGE_NAMESPACE}/rainbond-operator:$VERSION .
-  - docker login ${IMAGE_DOMAIN} -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-  - docker push ${IMAGE_DOMAIN}/${IMAGE_NAMESPACE}/rainbond-operator:$VERSION
+  - docker build --build-arg ARCH=arm64 -t $IMAGE_DOMAIN/$IMAGE_NAMESPACE/rainbond-operator:$VERSION .
+  - docker login $IMAGE_DOMAIN -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+  - docker push $IMAGE_DOMAIN/$IMAGE_NAMESPACE/rainbond-operator:$VERSION
 
 services:
 - name: docker
@@ -164,7 +164,7 @@ steps:
   image: alpine/git
   environment:
   commands:
-  - git clone -b $VERSION --depth=1 https://pull-code:gr123465!!@git.goodrain.com/goodrain/rainbond.git
+  - git clone -b enterprise-2306 --depth=1 https://pull-code:gr123465!!@git.goodrain.com/goodrain/rainbond.git
 
 - name: build rainbond
   image: rainbond/docker:dind

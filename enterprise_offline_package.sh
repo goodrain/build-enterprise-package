@@ -4,14 +4,12 @@ DOCKER_VERSION=${DOCKER_VERSION:-"20.10.9"}
 
 function download_offline_package () {
     if [ $(arch) == "x86_64" ] || [ $(arch) == "amd64" ]; then
-        export RBD_VER=${RBD_VER}
         wget https://pkg.rainbond.com/offline/nfs-client/nfs_all.tar.gz -O ./offline/nfs_all.tar.gz
         wget https://pkg.rainbond.com/offline/docker/docker-${DOCKER_VERSION}.tgz -O ./offline/docker-${DOCKER_VER}.tgz
         wget https://pkg.goodrain.com/pkg/kubectl/v1.23.10/kubectl -O ./offline/kubectl
         wget https://pkg.goodrain.com/pkg/helm/v3.10.1/helm -O ./offline/helm
         wget https://pkg.goodrain.com/pkg/rke/v1.3.15/rke -O ./offline/rke
     elif [ $(arch) == "aarch64" ] || [ $(arch) == "arm64" ]; then
-        export RBD_VER=${RBD_VER}
         wget https://pkg.rainbond.com/offline/nfs-client/nfs_all_arm.tar.gz -O ./offline/nfs_all.tar.gz
         wget https://pkg.rainbond.com/offline/docker/docker-arm-${DOCKER_VERSION}.tgz -O ./offline/docker-arm-${DOCKER_VER}.tgz
         wget https://pkg.goodrain.com/pkg/kubectl/v1.23.10/kubectl-arm -O ./offline/kubectl
@@ -61,23 +59,23 @@ rancher/mirrored-k8s-dns-sidecar:1.21.1"
 
 function get_rbd_images() {
 
-image_list="image.goodrain.com/goodrain/rainbond:$RBD_VER-allinone
-image.goodrain.com/goodrain/rbd-node:$RBD_VER
-image.goodrain.com/goodrain/rbd-resource-proxy:$RBD_VER
-image.goodrain.com/goodrain/rbd-eventlog:$RBD_VER
-image.goodrain.com/goodrain/rbd-worker:$RBD_VER
-image.goodrain.com/goodrain/rbd-gateway:$RBD_VER
-image.goodrain.com/goodrain/rbd-chaos:$RBD_VER
-image.goodrain.com/goodrain/rbd-api:$RBD_VER
-image.goodrain.com/goodrain/rbd-webcli:$RBD_VER
-image.goodrain.com/goodrain/rbd-mq:$RBD_VER
-image.goodrain.com/goodrain/rbd-monitor:$RBD_VER
-image.goodrain.com/goodrain/rbd-mesh-data-panel:$RBD_VER
-image.goodrain.com/goodrain/rbd-init-probe:$RBD_VER
-image.goodrain.com/goodrain/rbd-grctl:$RBD_VER
+image_list="image.goodrain.com/goodrain/rainbond:$VERSION-allinone
+image.goodrain.com/goodrain/rbd-node:$VERSION
+image.goodrain.com/goodrain/rbd-resource-proxy:$VERSION
+image.goodrain.com/goodrain/rbd-eventlog:$VERSION
+image.goodrain.com/goodrain/rbd-worker:$VERSION
+image.goodrain.com/goodrain/rbd-gateway:$VERSION
+image.goodrain.com/goodrain/rbd-chaos:$VERSION
+image.goodrain.com/goodrain/rbd-api:$VERSION
+image.goodrain.com/goodrain/rbd-webcli:$VERSION
+image.goodrain.com/goodrain/rbd-mq:$VERSION
+image.goodrain.com/goodrain/rbd-monitor:$VERSION
+image.goodrain.com/goodrain/rbd-mesh-data-panel:$VERSION
+image.goodrain.com/goodrain/rbd-init-probe:$VERSION
+image.goodrain.com/goodrain/rbd-grctl:$VERSION
+image.goodrain.com/goodrain/rainbond-operator:$VERSION
 registry.cn-hangzhou.aliyuncs.com/goodrain/builder:latest
 registry.cn-hangzhou.aliyuncs.com/goodrain/runner:latest
-registry.cn-hangzhou.aliyuncs.com/goodrain/rainbond-operator:$RBD_VER
 registry.cn-hangzhou.aliyuncs.com/goodrain/nfs-provisioner:latest
 rainbond/rbd-db:8.0.19
 rainbond/mysqld-exporter:latest

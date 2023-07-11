@@ -1,19 +1,19 @@
 #!/bin/bash
 
-DOCKER_VERSION=${VERSION:-"20.10.9"}
+DOCKER_VERSION=${DOCKER_VERSION:-"20.10.9"}
 
 function download_offline_package () {
     if [ $(arch) == "x86_64" ] || [ $(arch) == "amd64" ]; then
         export RBD_VER=${RBD_VER}
         wget https://pkg.rainbond.com/offline/nfs-client/nfs_all.tar.gz -O ./offline/nfs_all.tar.gz
-        wget https://pkg.rainbond.com/offline/docker/docker-${DOCKER_VER}.tgz -O ./offline/docker-${DOCKER_VER}.tgz
+        wget https://pkg.rainbond.com/offline/docker/docker-${DOCKER_VERSION}.tgz -O ./offline/docker-${DOCKER_VER}.tgz
         wget https://pkg.goodrain.com/pkg/kubectl/v1.23.10/kubectl -O ./offline/kubectl
         wget https://pkg.goodrain.com/pkg/helm/v3.10.1/helm -O ./offline/helm
         wget https://pkg.goodrain.com/pkg/rke/v1.3.15/rke -O ./offline/rke
     elif [ $(arch) == "aarch64" ] || [ $(arch) == "arm64" ]; then
         export RBD_VER=${RBD_VER}-arm
         wget https://pkg.rainbond.com/offline/nfs-client/nfs_all_arm.tar.gz -O ./offline/nfs_all.tar.gz
-        wget https://pkg.rainbond.com/offline/docker/docker-${DOCKER_VER}.tgz -O ./offline/docker-arm-${DOCKER_VER}.tgz
+        wget https://pkg.rainbond.com/offline/docker/docker-arm-${DOCKER_VERSION}.tgz -O ./offline/docker-arm-${DOCKER_VER}.tgz
         wget https://pkg.goodrain.com/pkg/kubectl/v1.23.10/kubectl-arm -O ./offline/kubectl
         wget https://pkg.goodrain.com/pkg/helm/v3.10.1/helm-arm64 -O ./offline/helm
         wget https://pkg.goodrain.com/pkg/rke/v1.3.15/rke-arm -O ./offline/rke

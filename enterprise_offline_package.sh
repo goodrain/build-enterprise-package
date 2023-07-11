@@ -104,7 +104,7 @@ function main() {
     
     get_rbd_images
 
-    tar zcvf rainbond-offline-$RBD_VER.tgz offline/*
+    tar zcvf rainbond-offline-$VERSION.tgz offline/*
 
 }
 

@@ -15,7 +15,7 @@ docker run --detach   \
     --name=runner \
     -e DRONE_UI_USERNAME=root \
     -e DRONE_UI_PASSWORD=root \
-    -e DRONE_RUNNER_LABELS=city:sydney \
+    -e DRONE_RUNNER_LABELS=city:aliyun \
     drone/drone-runner-docker:1.8.0
 ```
 

@@ -13,25 +13,20 @@ trigger:
 node:
   city: sydney
 
-
+environment:
+  GOOS: linux
+  VERSION: enterprise-2306-arm
+  IMAGE_DOMAIN: image.goodrain.com
+  IMAGE_NAMESPACE: goodrain
+  DOCKER_USERNAME: root
+  DOCKER_PASSWORD: goodrain123465!
+  
 steps:
 - name: clone rainbond-ui-cloud
   image: alpine/git
-  environment:
-    BRANCH:
-      from_secret: branch
-    VERSION:
-      from_secret: version
-    GITLAB_USER:
-      from_secret: gitlab_user
-    GITLAB_PASS:
-      from_secret: gitlab_pass
-    OPERATOR_BRANCH:
-      from_secret: operator_branch
   commands:
-  - git clone -b $BRANCH --depth=1 https://$GITLAB_USER:$GITLAB_PASS@git.goodrain.com/goodrain/rainbond-ui-cloud.git
-  - git clone -b $BRANCH --depth=1 https://$GITLAB_USER:$GITLAB_PASS@git.goodrain.com/goodrain/rainbond-console-cloud.git
-  - git clone -b $OPERATOR_BRANCH --depth=1 https://ghproxy.com/https://github.com/goodrain/rainbond-operator.git
+  - git clone -b enterprise-2306 --depth=1 https://pull-code:gr123465!!@git.goodrain.com/goodrain/rainbond-ui-cloud.git
+  - git clone -b enterprise-2306 --depth=1 https://pull-code:gr123465!!@git.goodrain.com/goodrain/rainbond-console-cloud.git
 
 - name: build rainbond-ui-cloud dist
   image: node:14
@@ -55,27 +50,7 @@ steps:
   commands:
   - sleep 10 # give docker enough time to start
   - cd rainbond-ui-cloud
-  - docker build -t goodrain/rainbond-ui:$VERSION .
-
-- name: build rainbond-operator
-  image: rainbond/docker:dind
-  privileged: true
-  volumes:
-  - name: dockersock
-    path: /var/run
-  environment:
-    VERSION:
-      from_secret: version
-    DOMESTIC_DOCKER_USERNAME:
-      from_secret: domestic_docker_username
-    DOMESTIC_DOCKER_PASSWORD:
-      from_secret: domestic_docker_password
-  commands:
-  - sleep 10 # give docker enough time to start
-  - cd rainbond-operator
-  - docker build --build-arg ARCH=arm64 -t registry.cn-hangzhou.aliyuncs.com/goodrain/rainbond-operator:$VERSION .
-  - docker login registry.cn-hangzhou.aliyuncs.com -u "$DOMESTIC_DOCKER_USERNAME" -p $DOMESTIC_DOCKER_PASSWORD
-  - docker push registry.cn-hangzhou.aliyuncs.com/goodrain/rainbond-operator:$VERSION
+  - docker build -t ${IMAGE_DOMAIN}/${IMAGE_NAMESPACE}/rainbond-ui:$VERSION .
 
 - name: build rainbond-console
   image: rainbond/docker:dind
@@ -83,30 +58,10 @@ steps:
   volumes:
   - name: dockersock
     path: /var/run
-  environment:
-    TRAVIS_PULL_REQUEST:
-      from_secret: false
-    VERSION:
-      from_secret: version
-    DOCKER_USERNAME:
-      from_secret: docker_username
-    DOCKER_PASSWORD:
-      from_secret: docker_password
-    ADAPTOR_VERSION:
-      from_secret: adaptor_version
-    GITLAB_USER:
-      from_secret: gitlab_user
-    GITLAB_PASS:
-      from_secret: gitlab_pass
-    IMAGE_DOMAIN:
-      from_secret: image_domain
-    IMAGE_NAMESPACE:
-      from_secret: image_namespace
-    GOOS: linux
   commands:
   - rm -rf rainbond-ui
   - cd rainbond-console-cloud
-  - BUILD_ARCH=arm64 ./release.sh allinone_arm
+  - BUILD_ARCH=arm64 ./release.sh allinone
   when:
     event:
       include:
@@ -124,6 +79,61 @@ volumes:
 - name: dockersock
   temp: {}
 
+---
+kind: pipeline
+name: build-rainbond-operator
+
+platform:
+  os: linux
+  arch: arm64
+
+trigger:
+  event:
+    include:
+    - custom
+
+node:
+  city: sydney
+
+environment:
+  GOOS: linux
+  VERSION: enterprise-2306-arm
+  IMAGE_DOMAIN: image.goodrain.com
+  IMAGE_NAMESPACE: goodrain
+  DOCKER_USERNAME: root
+  DOCKER_PASSWORD: goodrain123465!
+  
+steps:
+- name: clone rainbond
+  image: alpine/git
+  commands:
+  - - git clone -b v5.14.2-release --depth=1 https://github.com/goodrain/rainbond-operator.git
+
+- name: build rainbond-operator
+  image: rainbond/docker:dind
+  privileged: true
+  volumes:
+  - name: dockersock
+    path: /var/run
+  commands:
+  - sleep 10 # give docker enough time to start
+  - cd rainbond-operator
+  - docker build --build-arg ARCH=arm64 -t ${IMAGE_DOMAIN}/${IMAGE_NAMESPACE}/rainbond-operator:$VERSION .
+  - docker login ${IMAGE_DOMAIN} -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+  - docker push ${IMAGE_DOMAIN}/${IMAGE_NAMESPACE}/rainbond-operator:$VERSION
+
+services:
+- name: docker
+  image: docker:dind
+  privileged: true
+  volumes:
+  - name: dockersock
+    path: /var/run
+
+volumes:
+- name: dockersock
+  temp: {}
+  
 ---
 
 kind: pipeline
@@ -141,18 +151,21 @@ trigger:
 node:
   city: sydney
 
+environment:
+  GOOS: linux
+  GOARCH: arm64
+  VERSION: enterprise-2306-arm
+  IMAGE_DOMAIN: image.goodrain.com
+  DOCKER_NAMESPACE: goodrain
+  DOCKER_USERNAME: root
+  DOCKER_PASSWORD: goodrain123465!
+
 steps:
 - name: clone rainbond
   image: alpine/git
   environment:
-    BRANCH:
-      from_secret: branch
-    GITLAB_USER:
-      from_secret: gitlab_user
-    GITLAB_PASS:
-      from_secret: gitlab_pass
   commands:
-  - git clone -b $BRANCH --depth=1 https://$GITLAB_USER:$GITLAB_PASS@git.goodrain.com/goodrain/rainbond.git
+  - git clone -b $VERSION --depth=1 https://pull-code:gr123465!!@git.goodrain.com/goodrain/rainbond.git
 
 - name: build rainbond
   image: rainbond/docker:dind
@@ -160,19 +173,6 @@ steps:
   volumes:
   - name: dockersock
     path: /var/run
-  environment:
-    VERSION:
-      from_secret: version
-    DOCKER_USERNAME:
-      from_secret: docker_username
-    DOCKER_PASSWORD:
-      from_secret: docker_password
-    IMAGE_DOMAIN:
-      from_secret: image_domain
-    DOCKER_NAMESPACE:
-      from_secret: image_namespace
-    GOOS: linux
-    GOARCH: arm64
   commands:
   - sleep 10 # give docker enough time to start
   - cd rainbond
@@ -181,7 +181,6 @@ steps:
     event:
       include:
       - custom
-
 
 services:
 - name: docker
@@ -194,10 +193,7 @@ services:
 volumes:
 - name: dockersock
   temp: {}
-
-depends_on:
-- build-rainbond-allinone
-
+  
 ---
 
 kind: pipeline
@@ -215,6 +211,15 @@ trigger:
 node:
   city: sydney
 
+environment:
+  GOOS: linux
+  GOARCH: arm64
+  VERSION: enterprise-2306-arm
+  IMAGE_DOMAIN: image.goodrain.com
+  DOCKER_NAMESPACE: goodrain
+  DOCKER_USERNAME: root
+  DOCKER_PASSWORD: goodrain123465!
+
 steps:    
 - name: build rainbond package
   image: rainbond/docker:dind
@@ -222,17 +227,6 @@ steps:
   volumes:
   - name: dockersock
     path: /var/run
-  environment:
-    RBD_VER:
-      from_secret: version
-    IMAGE_DOMAIN:
-      from_secret: image_domain
-    DOCKER_USERNAME:
-      from_secret: docker_username
-    DOCKER_PASSWORD:
-      from_secret: docker_password
-    GOOS: linux
-    GOARCH: arm64
   commands:
   - docker login image.goodrain.com -u "$DOCKER_USERNAME" -p $DOCKER_PASSWORD
   - sleep 10 # give docker enough time to start
@@ -254,8 +248,6 @@ steps:
       from_secret: aki
     AKS:
       from_secret: aks
-    GOOS: linux
-    GOARCH: arm64
   commands:
   - sleep 10 # give docker enough time to start
   - wget https://gosspublic.alicdn.com/ossutil/1.7.11/ossutilarm64 && chmod +x ossutilarm64
@@ -280,4 +272,5 @@ volumes:
 
 depends_on:
 - build-rainbond-allinone
+- build-rainbond-operator
 - build-rainbond-region

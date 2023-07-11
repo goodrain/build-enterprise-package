@@ -11,7 +11,7 @@ function download_offline_package () {
         wget https://pkg.goodrain.com/pkg/helm/v3.10.1/helm -O ./offline/helm
         wget https://pkg.goodrain.com/pkg/rke/v1.3.15/rke -O ./offline/rke
     elif [ $(arch) == "aarch64" ] || [ $(arch) == "arm64" ]; then
-        export RBD_VER=${RBD_VER}-arm
+        export RBD_VER=${RBD_VER}
         wget https://pkg.rainbond.com/offline/nfs-client/nfs_all_arm.tar.gz -O ./offline/nfs_all.tar.gz
         wget https://pkg.rainbond.com/offline/docker/docker-arm-${DOCKER_VERSION}.tgz -O ./offline/docker-arm-${DOCKER_VER}.tgz
         wget https://pkg.goodrain.com/pkg/kubectl/v1.23.10/kubectl-arm -O ./offline/kubectl

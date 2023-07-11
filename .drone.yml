@@ -44,9 +44,6 @@ steps:
   volumes:
   - name: dockersock
     path: /var/run
-  environment:
-    VERSION:
-      from_secret: version
   commands:
   - sleep 10 # give docker enough time to start
   - cd rainbond-ui-cloud

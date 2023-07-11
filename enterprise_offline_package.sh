@@ -77,12 +77,13 @@ image.goodrain.com/goodrain/rainbond-operator:$VERSION
 registry.cn-hangzhou.aliyuncs.com/goodrain/builder:latest
 registry.cn-hangzhou.aliyuncs.com/goodrain/runner:latest
 registry.cn-hangzhou.aliyuncs.com/goodrain/nfs-provisioner:latest
-rainbond/rbd-db:8.0.19
+rainbond/rbd-db:8.0
 rainbond/mysqld-exporter:latest
 rainbond/kubernetes-dashboard:v2.6.1
 rainbond/metrics-scraper:v1.0.4
 rainbond/etcd:v3.3.18
-rainbond/registry:2.6.2"
+rainbond/registry:2.6.2
+rainbond/metrics-server:v0.4.1"
     
     for images in ${image_list}; do
         rbd_image_tar=$(echo ${images} | awk -F"/" '{print $NF}' | tr : -)

@@ -145,14 +145,14 @@ steps:
 - name: clone rainbond
   image: alpine/git
   environment:
-    VERSION:
-      from_secret: version
+    BRANCH:
+      from_secret: branch
     GITLAB_USER:
       from_secret: gitlab_user
     GITLAB_PASS:
       from_secret: gitlab_pass
   commands:
-  - git clone -b $VERSION --depth=1 https://$GITLAB_USER:$GITLAB_PASS@git.goodrain.com/goodrain/rainbond.git
+  - git clone -b $BRANCH --depth=1 https://$GITLAB_USER:$GITLAB_PASS@git.goodrain.com/goodrain/rainbond.git
 
 - name: build rainbond
   image: rainbond/docker:dind

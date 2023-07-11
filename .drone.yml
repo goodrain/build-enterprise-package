@@ -20,6 +20,7 @@ environment:
   IMAGE_NAMESPACE: goodrain
   DOCKER_USERNAME: root
   DOCKER_PASSWORD: goodrain123465!
+  ALLINONE: true
   
 steps:
 - name: clone rainbond-ui-cloud
@@ -30,8 +31,6 @@ steps:
 
 - name: build rainbond-ui-cloud dist
   image: node:14
-  environment:
-    ALLINONE: true
   commands:
   - cd rainbond-ui-cloud
   - yarn config set registry https://registry.npm.taobao.org

@@ -44,7 +44,7 @@ rancher/hyperkube:v1.23.10-rancher1
 rancher/mirrored-coreos-flannel:v0.15.1
 rancher/flannel-cni:v0.3.0-rancher6
 rancher/mirrored-pause:3.6
-rancher/mirrored-metrics-server:v0.6.1
+rancher/mirrored-metrics-server:v0.4.1
 rancher/mirrored-k8s-dns-kube-dns:1.21.1
 rancher/mirrored-k8s-dns-dnsmasq-nanny:1.21.1
 rancher/mirrored-k8s-dns-sidecar:1.21.1"

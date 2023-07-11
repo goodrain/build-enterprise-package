@@ -12,7 +12,7 @@ trigger:
     - custom
 
 node:
-  city: sydney
+  city: aliyun
 
 environment:
   GOOS: linux
@@ -91,7 +91,7 @@ trigger:
     - custom
 
 node:
-  city: sydney
+  city: aliyun
 
 environment:
   GOOS: linux
@@ -148,7 +148,7 @@ trigger:
     - custom
 
 node:
-  city: sydney
+  city: aliyun
 
 environment:
   GOOS: linux
@@ -209,7 +209,7 @@ trigger:
     - custom
 
 node:
-  city: sydney
+  city: aliyun
 
 environment:
   GOOS: linux

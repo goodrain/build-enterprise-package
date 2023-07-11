@@ -1,199 +1,199 @@
-kind: pipeline
-type: docker
-name: build-rainbond-allinone
+# kind: pipeline
+# type: docker
+# name: build-rainbond-allinone
 
-platform:
-  os: linux
-  arch: arm64
+# platform:
+#   os: linux
+#   arch: arm64
 
-trigger:
-  event:
-    include:
-    - custom
+# trigger:
+#   event:
+#     include:
+#     - custom
 
-node:
-  city: aliyun
+# node:
+#   city: aliyun
 
-environment:
-  GOOS: linux
-  VERSION: enterprise-2306-arm
-  IMAGE_DOMAIN: image.goodrain.com
-  IMAGE_NAMESPACE: goodrain
-  DOCKER_USERNAME: root
-  DOCKER_PASSWORD: goodrain123465!
-  ALLINONE: true
+# environment:
+#   GOOS: linux
+#   VERSION: enterprise-2306-arm
+#   IMAGE_DOMAIN: image.goodrain.com
+#   IMAGE_NAMESPACE: goodrain
+#   DOCKER_USERNAME: root
+#   DOCKER_PASSWORD: goodrain123465!
+#   ALLINONE: true
   
-steps:
-- name: clone rainbond-ui-cloud
-  image: alpine/git
-  commands:
-  - git clone -b enterprise-2306 --depth=1 https://pull-code:gr123465!!@git.goodrain.com/goodrain/rainbond-ui-cloud.git
-  - git clone -b enterprise-2306 --depth=1 https://pull-code:gr123465!!@git.goodrain.com/goodrain/rainbond-console-cloud.git
+# steps:
+# - name: clone rainbond-ui-cloud
+#   image: alpine/git
+#   commands:
+#   - git clone -b enterprise-2306 --depth=1 https://pull-code:gr123465!!@git.goodrain.com/goodrain/rainbond-ui-cloud.git
+#   - git clone -b enterprise-2306 --depth=1 https://pull-code:gr123465!!@git.goodrain.com/goodrain/rainbond-console-cloud.git
 
-- name: build rainbond-ui-cloud dist
-  image: node:14
-  commands:
-  - cd rainbond-ui-cloud
-  # - yarn config set registry https://registry.npm.taobao.org
-  - yarn install
-  - yarn run build
+# - name: build rainbond-ui-cloud dist
+#   image: node:14
+#   commands:
+#   - cd rainbond-ui-cloud
+#   # - yarn config set registry https://registry.npm.taobao.org
+#   - yarn install
+#   - yarn run build
 
-- name: build rainbond-ui-cloud
-  image: rainbond/docker:dind
-  privileged: true
-  volumes:
-  - name: dockersock
-    path: /var/run
-  commands:
-  - sleep 10 # give docker enough time to start
-  - cd rainbond-ui-cloud
-  - docker build -t $IMAGE_DOMAIN/$IMAGE_NAMESPACE/rainbond-ui:$VERSION .
+# - name: build rainbond-ui-cloud
+#   image: rainbond/docker:dind
+#   privileged: true
+#   volumes:
+#   - name: dockersock
+#     path: /var/run
+#   commands:
+#   - sleep 10 # give docker enough time to start
+#   - cd rainbond-ui-cloud
+#   - docker build -t $IMAGE_DOMAIN/$IMAGE_NAMESPACE/rainbond-ui:$VERSION .
 
-- name: build rainbond-console
-  image: rainbond/docker:dind
-  privileged: true
-  volumes:
-  - name: dockersock
-    path: /var/run
-  commands:
-  - rm -rf rainbond-ui
-  - cd rainbond-console-cloud
-  - BUILD_ARCH=arm64 ./release.sh allinone
-  when:
-    event:
-      include:
-      - custom
+# - name: build rainbond-console
+#   image: rainbond/docker:dind
+#   privileged: true
+#   volumes:
+#   - name: dockersock
+#     path: /var/run
+#   commands:
+#   - rm -rf rainbond-ui
+#   - cd rainbond-console-cloud
+#   - BUILD_ARCH=arm64 ./release.sh allinone
+#   when:
+#     event:
+#       include:
+#       - custom
 
-services:
-- name: docker
-  image: docker:dind
-  privileged: true
-  volumes:
-  - name: dockersock
-    path: /var/run
+# services:
+# - name: docker
+#   image: docker:dind
+#   privileged: true
+#   volumes:
+#   - name: dockersock
+#     path: /var/run
 
-volumes:
-- name: dockersock
-  temp: {}
+# volumes:
+# - name: dockersock
+#   temp: {}
 
----
-kind: pipeline
-type: docker
-name: build-rainbond-operator
+# ---
+# kind: pipeline
+# type: docker
+# name: build-rainbond-operator
 
-platform:
-  os: linux
-  arch: arm64
+# platform:
+#   os: linux
+#   arch: arm64
 
-trigger:
-  event:
-    include:
-    - custom
+# trigger:
+#   event:
+#     include:
+#     - custom
 
-node:
-  city: aliyun
+# node:
+#   city: aliyun
 
-environment:
-  GOOS: linux
-  VERSION: enterprise-2306-arm
-  IMAGE_DOMAIN: image.goodrain.com
-  IMAGE_NAMESPACE: goodrain
-  DOCKER_USERNAME: root
-  DOCKER_PASSWORD: goodrain123465!
+# environment:
+#   GOOS: linux
+#   VERSION: enterprise-2306-arm
+#   IMAGE_DOMAIN: image.goodrain.com
+#   IMAGE_NAMESPACE: goodrain
+#   DOCKER_USERNAME: root
+#   DOCKER_PASSWORD: goodrain123465!
   
-steps:
-- name: clone rainbond
-  image: alpine/git
-  commands:
-  - git clone -b v5.14.2-release --depth=1 https://github.com/goodrain/rainbond-operator.git
+# steps:
+# - name: clone rainbond
+#   image: alpine/git
+#   commands:
+#   - git clone -b v5.14.2-release --depth=1 https://github.com/goodrain/rainbond-operator.git
 
-- name: build rainbond-operator
-  image: rainbond/docker:dind
-  privileged: true
-  volumes:
-  - name: dockersock
-    path: /var/run
-  commands:
-  - sleep 10 # give docker enough time to start
-  - cd rainbond-operator
-  - docker build --build-arg ARCH=arm64 -t $IMAGE_DOMAIN/$IMAGE_NAMESPACE/rainbond-operator:$VERSION .
-  - docker login $IMAGE_DOMAIN -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-  - docker push $IMAGE_DOMAIN/$IMAGE_NAMESPACE/rainbond-operator:$VERSION
+# - name: build rainbond-operator
+#   image: rainbond/docker:dind
+#   privileged: true
+#   volumes:
+#   - name: dockersock
+#     path: /var/run
+#   commands:
+#   - sleep 10 # give docker enough time to start
+#   - cd rainbond-operator
+#   - docker build --build-arg ARCH=arm64 -t $IMAGE_DOMAIN/$IMAGE_NAMESPACE/rainbond-operator:$VERSION .
+#   - docker login $IMAGE_DOMAIN -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+#   - docker push $IMAGE_DOMAIN/$IMAGE_NAMESPACE/rainbond-operator:$VERSION
 
-services:
-- name: docker
-  image: docker:dind
-  privileged: true
-  volumes:
-  - name: dockersock
-    path: /var/run
+# services:
+# - name: docker
+#   image: docker:dind
+#   privileged: true
+#   volumes:
+#   - name: dockersock
+#     path: /var/run
 
-volumes:
-- name: dockersock
-  temp: {}
+# volumes:
+# - name: dockersock
+#   temp: {}
   
----
+# ---
 
-kind: pipeline
-type: docker
-name: build-rainbond-region
+# kind: pipeline
+# type: docker
+# name: build-rainbond-region
 
-platform:
-  os: linux
-  arch: arm64
+# platform:
+#   os: linux
+#   arch: arm64
 
-trigger:
-  event:
-    include:
-    - custom
+# trigger:
+#   event:
+#     include:
+#     - custom
 
-node:
-  city: aliyun
+# node:
+#   city: aliyun
 
-environment:
-  GOOS: linux
-  GOARCH: arm64
-  VERSION: enterprise-2306-arm
-  IMAGE_DOMAIN: image.goodrain.com
-  DOCKER_NAMESPACE: goodrain
-  DOCKER_USERNAME: root
-  DOCKER_PASSWORD: goodrain123465!
+# environment:
+#   GOOS: linux
+#   GOARCH: arm64
+#   VERSION: enterprise-2306-arm
+#   IMAGE_DOMAIN: image.goodrain.com
+#   DOCKER_NAMESPACE: goodrain
+#   DOCKER_USERNAME: root
+#   DOCKER_PASSWORD: goodrain123465!
 
-steps:
-- name: clone rainbond
-  image: alpine/git
-  environment:
-  commands:
-  - git clone -b enterprise-2306 --depth=1 https://pull-code:gr123465!!@git.goodrain.com/goodrain/rainbond.git
+# steps:
+# - name: clone rainbond
+#   image: alpine/git
+#   environment:
+#   commands:
+#   - git clone -b enterprise-2306 --depth=1 https://pull-code:gr123465!!@git.goodrain.com/goodrain/rainbond.git
 
-- name: build rainbond
-  image: rainbond/docker:dind
-  privileged: true
-  volumes:
-  - name: dockersock
-    path: /var/run
-  commands:
-  - sleep 10 # give docker enough time to start
-  - cd rainbond
-  - BUILD_GOARCH=arm64 BUILD_BASE_IMAGE_VERSION=3.7 ./release.sh all push
-  when:
-    event:
-      include:
-      - custom
+# - name: build rainbond
+#   image: rainbond/docker:dind
+#   privileged: true
+#   volumes:
+#   - name: dockersock
+#     path: /var/run
+#   commands:
+#   - sleep 10 # give docker enough time to start
+#   - cd rainbond
+#   - BUILD_GOARCH=arm64 BUILD_BASE_IMAGE_VERSION=3.7 ./release.sh all push
+#   when:
+#     event:
+#       include:
+#       - custom
 
-services:
-- name: docker
-  image: docker:dind
-  privileged: true
-  volumes:
-  - name: dockersock
-    path: /var/run
+# services:
+# - name: docker
+#   image: docker:dind
+#   privileged: true
+#   volumes:
+#   - name: dockersock
+#     path: /var/run
 
-volumes:
-- name: dockersock
-  temp: {}
+# volumes:
+# - name: dockersock
+#   temp: {}
   
----
+# ---
 
 kind: pipeline
 type: docker
@@ -270,7 +270,7 @@ volumes:
 - name: dockersock
   temp: {}
 
-depends_on:
-- build-rainbond-allinone
-- build-rainbond-operator
-- build-rainbond-region
+# depends_on:
+# - build-rainbond-allinone
+# - build-rainbond-operator
+# - build-rainbond-region

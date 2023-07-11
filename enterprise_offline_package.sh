@@ -79,7 +79,7 @@ registry.cn-hangzhou.aliyuncs.com/goodrain/builder:latest
 registry.cn-hangzhou.aliyuncs.com/goodrain/runner:latest
 registry.cn-hangzhou.aliyuncs.com/goodrain/rainbond-operator:$RBD_VER
 registry.cn-hangzhou.aliyuncs.com/goodrain/nfs-provisioner:latest
-rainbond/rbd-db:8.0
+rainbond/rbd-db:8.0.19
 rainbond/mysqld-exporter:latest
 rainbond/kubernetes-dashboard:v2.6.1
 rainbond/metrics-scraper:v1.0.4

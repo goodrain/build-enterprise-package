@@ -1,4 +1,5 @@
 kind: pipeline
+type: docker
 name: build-rainbond-allinone
 
 platform:
@@ -77,6 +78,7 @@ volumes:
 
 ---
 kind: pipeline
+type: docker
 name: build-rainbond-operator
 
 platform:
@@ -133,6 +135,7 @@ volumes:
 ---
 
 kind: pipeline
+type: docker
 name: build-rainbond-region
 
 platform:
@@ -193,6 +196,7 @@ volumes:
 ---
 
 kind: pipeline
+type: docker
 name: build-rainbond-package
 
 platform:

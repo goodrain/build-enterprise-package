@@ -111,7 +111,7 @@ jobs:
 
       - name: Pack offline packages
         env:
-          RBD_VER: enterprise-2306
+          VERSION: enterprise-2306
         run: chmod +x ./enterprise_offline_package.sh && ./enterprise_offline_package.sh
         
       - name: Setup aliyun oss

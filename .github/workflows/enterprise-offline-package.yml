@@ -98,7 +98,7 @@ jobs:
           ./release.sh all push
 
   build:
-    needs: build-rainbond-allinone, build-rainbond-region
+    needs: [build-rainbond-allinone, build-rainbond-region]
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2

@@ -92,7 +92,7 @@ jobs:
           DOCKER_USERNAME: root
           DOCKER_PASSWORD: goodrain123465!
         run: |
-          git clone -b ${{ secrets.VERSION }} https://${{ secrets.GITLAB_USER }}:"${{ secrets.GITLAB_PASSWORD }}"@git.goodrain.com/goodrain/rainbond.git
+          git clone -b ${ VERSION } https://pull-code:gr123465!!@git.goodrain.com/goodrain/rainbond.git
           cd rainbond
           chmod +x ./release.sh
           ./release.sh all push

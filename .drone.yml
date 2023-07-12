@@ -34,7 +34,7 @@ steps:
   image: node:14
   commands:
   - cd rainbond-ui-cloud
-  # - yarn config set registry https://registry.npm.taobao.org
+  - yarn config set registry https://registry.npm.taobao.org
   - yarn install
   - yarn run build
 

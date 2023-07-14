@@ -87,7 +87,7 @@ jobs:
         run: |
           git clone -b $BRANCH https://github.com/goodrain/rainbond-operator.git
           cd rainbond-operator
-          docker build --build-arg -t $IMAGE_DOMAIN/$IMAGE_NAMESPACE/rainbond-operator:$VERSION .
+          docker build -t $IMAGE_DOMAIN/$IMAGE_NAMESPACE/rainbond-operator:$VERSION .
           docker push $IMAGE_DOMAIN/$IMAGE_NAMESPACE/rainbond-operator:$VERSION
 
   build-rainbond-region:

@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-ui:
+  build-allinone:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
@@ -13,11 +13,12 @@ jobs:
         env:
           DOCKER_USERNAME: root
           DOCKER_PASSWORD: goodrain123465!
-        run: echo "${ DOCKER_PASSWORD }" | docker login image.goodrain.com -u ${ DOCKER_USERNAME } --password-stdin
+        run: echo "$DOCKER_PASSWORD" | docker login image.goodrain.com -u $DOCKER_USERNAME --password-stdin
 
       - name: Pull code and Build ui image
         env:
           VERSION: enterprise-2306
+          BRANCH: enterprise-2306
           ALLINONE: true
           ROUTE_MODE: history
           TRAVIS_PULL_REQUEST: false
@@ -26,22 +27,10 @@ jobs:
           DOCKER_USERNAME: root
           DOCKER_PASSWORD: goodrain123465!
         run: |
-          git clone -b ${VERSION} https://pull-code:gr123465!!@git.goodrain.com/goodrain/rainbond-ui-cloud.git
+          git clone -b $BRANCH https://pull-code:gr123465!!@git.goodrain.com/goodrain/rainbond-ui-cloud.git
           cd rainbond-ui-cloud
           chmod +x ./build.sh
           ./build.sh
-
-  build-rainbond-allinone:
-    needs: build-ui
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: login image.goodrain.com hub
-        env:
-          DOCKER_USERNAME: root
-          DOCKER_PASSWORD: goodrain123465!
-        run: echo "${ DOCKER_PASSWORD }" | docker login image.goodrain.com -u ${ DOCKER_USERNAME } --password-stdin
 
       - name: Set up Python 3.6
         uses: actions/setup-python@v2
@@ -56,16 +45,50 @@ jobs:
       - name: Pull code and Build allinone image
         env:
           VERSION: enterprise-2306
+          BRANCH: enterprise-2306
           TRAVIS_PULL_REQUEST: false
           IMAGE_DOMAIN: image.goodrain.com
           IMAGE_NAMESPACE: goodrain
           DOCKER_USERNAME: root
           DOCKER_PASSWORD: goodrain123465!
         run: |
-          git clone -b ${ VERSION } https://pull-code:gr123465!!@git.goodrain.com/goodrain/rainbond-console-cloud.git
+          git clone -b $BRANCH https://pull-code:gr123465!!@git.goodrain.com/goodrain/rainbond-console-cloud.git
           cd rainbond-console-cloud
           chmod +x  ./release.sh
           ./release.sh allinone
+
+  build-operator:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Go environment
+        uses: actions/setup-go@v2.1.3
+        with:
+          # The Go version to download (if necessary) and use. Supports semver spec and ranges.
+          go-version: 1.18
+      - name: install-golint
+        run: |
+          git clone https://github.com/golang/lint.git
+          cd lint/golint
+          go install
+
+      - name: login image.goodrain.com hub
+        env:
+          DOCKER_USERNAME: root
+          DOCKER_PASSWORD: goodrain123465!
+        run: echo "$DOCKER_PASSWORD" | docker login image.goodrain.com -u $DOCKER_USERNAME --password-stdin
+
+      - name: Build and push
+        env:
+          IMAGE_DOMAIN: image.goodrain.com
+          IMAGE_NAMESPACE: goodrain
+          VERSION: enterprise-2306
+          BRANCH: main
+        run: |
+          git clone -b $BRANCH https://github.com/goodrain/rainbond-operator.git
+          cd rainbond-operator
+          docker build -t $IMAGE_DOMAIN/$IMAGE_NAMESPACE/rainbond-operator:$VERSION .
+          docker push $IMAGE_DOMAIN/$IMAGE_NAMESPACE/rainbond-operator:$VERSION
 
   build-rainbond-region:
     runs-on: ubuntu-latest
@@ -81,24 +104,25 @@ jobs:
         env:
           DOCKER_USERNAME: root
           DOCKER_PASSWORD: goodrain123465!
-        run: echo "${ DOCKER_PASSWORD }" | docker login image.goodrain.com -u ${ DOCKER_USERNAME } --password-stdin
+        run: echo "$DOCKER_PASSWORD" | docker login image.goodrain.com -u $DOCKER_USERNAME --password-stdin
 
       - name: Pull code and Build the Docker image
         env:
           VERSION: enterprise-2306
+          BRANCH: enterprise-2306
           DISABLE_GOPROXY: true
           IMAGE_DOMAIN: image.goodrain.com
           IMAGE_NAMESPACE: goodrain
           DOCKER_USERNAME: root
           DOCKER_PASSWORD: goodrain123465!
         run: |
-          git clone -b ${ VERSION } https://pull-code:gr123465!!@git.goodrain.com/goodrain/rainbond.git
+          git clone -b $BRANCH https://pull-code:gr123465!!@git.goodrain.com/goodrain/rainbond.git
           cd rainbond
           chmod +x ./release.sh
           ./release.sh all push
 
   build:
-    needs: [build-rainbond-allinone, build-rainbond-region]
+    needs: [build-allinone, build-rainbond-region, build-operator]
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
@@ -107,7 +131,7 @@ jobs:
         env:
           DOCKER_USERNAME: root
           DOCKER_PASSWORD: goodrain123465!
-        run: echo "${DOCKER_PASSWORD}" | docker login image.goodrain.com -u ${DOCKER_USERNAME} --password-stdin
+        run: echo "$DOCKER_PASSWORD" | docker login image.goodrain.com -u $DOCKER_USERNAME --password-stdin
 
       - name: Pack offline packages
         env:

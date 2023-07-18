@@ -17,8 +17,8 @@ jobs:
 
       - name: Pull code and Build ui image
         env:
-          VERSION: enterprise-2306
-          BRANCH: enterprise-2306
+          VERSION: enterprise-2304-bs
+          BRANCH: bs-2304
           ALLINONE: true
           ROUTE_MODE: history
           TRAVIS_PULL_REQUEST: false
@@ -44,8 +44,8 @@ jobs:
 
       - name: Pull code and Build allinone image
         env:
-          VERSION: enterprise-2306
-          BRANCH: enterprise-2306
+          VERSION: enterprise-2304-bs
+          BRANCH: bs-2304
           TRAVIS_PULL_REQUEST: false
           IMAGE_DOMAIN: image.goodrain.com
           IMAGE_NAMESPACE: goodrain
@@ -82,7 +82,7 @@ jobs:
         env:
           IMAGE_DOMAIN: image.goodrain.com
           IMAGE_NAMESPACE: goodrain
-          VERSION: enterprise-2306
+          VERSION: enterprise-2304-bs
           BRANCH: main
         run: |
           git clone -b $BRANCH https://github.com/goodrain/rainbond-operator.git
@@ -108,8 +108,8 @@ jobs:
 
       - name: Pull code and Build the Docker image
         env:
-          VERSION: enterprise-2306
-          BRANCH: enterprise-2306
+          VERSION: enterprise-2304-bs
+          BRANCH: bs-2304
           DISABLE_GOPROXY: true
           IMAGE_DOMAIN: image.goodrain.com
           IMAGE_NAMESPACE: goodrain
@@ -135,7 +135,7 @@ jobs:
 
       - name: Pack offline packages
         env:
-          VERSION: enterprise-2306
+          VERSION: enterprise-2304-bs
         run: chmod +x ./enterprise_offline_package.sh && ./enterprise_offline_package.sh
         
       - name: Setup aliyun oss

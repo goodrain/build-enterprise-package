@@ -88,7 +88,7 @@ rainbond/etcd:v3.3.18
 rainbond/registry:2.6.2
 rainbond/metrics-server:v0.4.1"
     
-    docker login -u "$DOMESTIC_DOCKER_USERNAME" -p "$DOMESTIC_DOCKER_PASSWORD" "${DOMESTIC_BASE_NAME}"
+    echo "$DOMESTIC_DOCKER_PASSWORD" | docker login "${DOMESTIC_BASE_NAME}" -u "$DOMESTIC_DOCKER_USERNAME" --password-stdin
     
     for images in ${image_list}; do
         rbd_image_tar=$(echo "${images}" | awk -F"/" '{print $NF}' | tr : -)

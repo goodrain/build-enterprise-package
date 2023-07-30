@@ -33,47 +33,50 @@ function download_offline_package () {
 
 function get_k8s_images() {
 
-image_list="rancher/mirrored-coreos-etcd:v3.5.3
-rancher/rke-tools:v0.1.87
-rancher/cluster-proportional-autoscaler:1.8.1
-rancher/mirrored-coredns-coredns:1.10.1
-rancher/mirrored-k8s-dns-node-cache:1.21.1
-rancher/hyperkube:v1.23.10-rancher1
-rancher/mirrored-coreos-flannel:v0.15.1
-rancher/flannel-cni:v0.3.0-rancher6
-rancher/mirrored-pause:3.6
-rancher/mirrored-metrics-server:v0.4.1
-rancher/mirrored-k8s-dns-kube-dns:1.21.1
-rancher/mirrored-k8s-dns-dnsmasq-nanny:1.21.1
-rancher/mirrored-k8s-dns-sidecar:1.21.1"
+image_list="rainbond/mirrored-coreos-etcd:v3.5.3
+rainbond/rke-tools:v0.1.87
+rainbond/cluster-proportional-autoscaler:1.8.1
+rainbond/mirrored-coredns-coredns:1.10.1
+rainbond/mirrored-k8s-dns-node-cache:1.21.1
+rainbond/hyperkube:v1.23.10-rancher1
+rainbond/mirrored-coreos-flannel:v0.15.1
+rainbond/flannel-cni:v0.3.0-rancher6
+rainbond/mirrored-pause:3.6
+rainbond/mirrored-metrics-server:v0.4.1
+rainbond/mirrored-k8s-dns-kube-dns:1.21.1
+rainbond/mirrored-k8s-dns-dnsmasq-nanny:1.21.1
+rainbond/mirrored-k8s-dns-sidecar:1.21.1"
 
     for images in ${image_list}; do
-        k8s_image_tar=$(echo ${images} | awk -F"/" '{print $NF}' | tr : -)
-        k8s_offline_image=$(echo ${images} | awk -F"/" '{print $NF}')
+        k8s_image_tar=$(echo "${images}" | awk -F"/" '{print $NF}' | tr : -)
+        k8s_offline_image=$(echo "${images}" | awk -F"/" '{print $NF}')
         
-        docker pull ${images} ||  exit 1
-        docker tag ${images} goodrain.me/${k8s_offline_image}
-        docker save goodrain.me/${k8s_offline_image} -o ./offline/k8s_image/${k8s_image_tar}.tgz
+        docker pull "${images}" ||  exit 1
+        docker tag "${images}" goodrain.me/"${k8s_offline_image}"
+        docker save goodrain.me/"${k8s_offline_image}" -o ./offline/k8s_image/"${k8s_image_tar}".tgz
     done
 }
 
 function get_rbd_images() {
 
-image_list="image.goodrain.com/goodrain/rainbond:$VERSION-allinone
-image.goodrain.com/goodrain/rbd-node:$VERSION
-image.goodrain.com/goodrain/rbd-resource-proxy:$VERSION
-image.goodrain.com/goodrain/rbd-eventlog:$VERSION
-image.goodrain.com/goodrain/rbd-worker:$VERSION
-image.goodrain.com/goodrain/rbd-gateway:$VERSION
-image.goodrain.com/goodrain/rbd-chaos:$VERSION
-image.goodrain.com/goodrain/rbd-api:$VERSION
-image.goodrain.com/goodrain/rbd-webcli:$VERSION
-image.goodrain.com/goodrain/rbd-mq:$VERSION
-image.goodrain.com/goodrain/rbd-monitor:$VERSION
-image.goodrain.com/goodrain/rbd-mesh-data-panel:$VERSION
-image.goodrain.com/goodrain/rbd-init-probe:$VERSION
-image.goodrain.com/goodrain/rbd-grctl:$VERSION
-image.goodrain.com/goodrain/rainbond-operator:$VERSION
+DOMESTIC_BASE_NAME=${DOMESTIC_BASE_NAME:-"registry.ap-southeast-1.aliyuncs.com"}
+DOMESTIC_NAMESPACE=${DOMESTIC_NAMESPACE:-"goodrain-ee"}
+
+image_list="$DOMESTIC_BASE_NAME/$DOMESTIC_NAMESPACE/rainbond:$VERSION-allinone
+$DOMESTIC_BASE_NAME/$DOMESTIC_NAMESPACE/rbd-node:$VERSION
+$DOMESTIC_BASE_NAME/$DOMESTIC_NAMESPACE/rbd-resource-proxy:$VERSION
+$DOMESTIC_BASE_NAME/$DOMESTIC_NAMESPACE/rbd-eventlog:$VERSION
+$DOMESTIC_BASE_NAME/$DOMESTIC_NAMESPACE/rbd-worker:$VERSION
+$DOMESTIC_BASE_NAME/$DOMESTIC_NAMESPACE/rbd-gateway:$VERSION
+$DOMESTIC_BASE_NAME/$DOMESTIC_NAMESPACE/rbd-chaos:$VERSION
+$DOMESTIC_BASE_NAME/$DOMESTIC_NAMESPACE/rbd-api:$VERSION
+$DOMESTIC_BASE_NAME/$DOMESTIC_NAMESPACE/rbd-webcli:$VERSION
+$DOMESTIC_BASE_NAME/$DOMESTIC_NAMESPACE/rbd-mq:$VERSION
+$DOMESTIC_BASE_NAME/$DOMESTIC_NAMESPACE/rbd-monitor:$VERSION
+$DOMESTIC_BASE_NAME/$DOMESTIC_NAMESPACE/rbd-mesh-data-panel:$VERSION
+$DOMESTIC_BASE_NAME/$DOMESTIC_NAMESPACE/rbd-init-probe:$VERSION
+$DOMESTIC_BASE_NAME/$DOMESTIC_NAMESPACE/rbd-grctl:$VERSION
+$DOMESTIC_BASE_NAME/$DOMESTIC_NAMESPACE/rainbond-operator:$VERSION
 registry.cn-hangzhou.aliyuncs.com/goodrain/builder:latest
 registry.cn-hangzhou.aliyuncs.com/goodrain/runner:latest
 registry.cn-hangzhou.aliyuncs.com/goodrain/nfs-provisioner:latest
@@ -85,13 +88,15 @@ rainbond/etcd:v3.3.18
 rainbond/registry:2.6.2
 rainbond/metrics-server:v0.4.1"
     
+    docker login -u "$DOMESTIC_DOCKER_USERNAME" -p "$DOMESTIC_DOCKER_PASSWORD" "${DOMESTIC_BASE_NAME}"
+    
     for images in ${image_list}; do
-        rbd_image_tar=$(echo ${images} | awk -F"/" '{print $NF}' | tr : -)
-        rbd_offline_image=$(echo ${images} | awk -F"/" '{print $NF}')
+        rbd_image_tar=$(echo "${images}" | awk -F"/" '{print $NF}' | tr : -)
+        rbd_offline_image=$(echo "${images}" | awk -F"/" '{print $NF}')
 
-        docker pull ${images} || exit 1
-        docker tag ${images} goodrain.me/${rbd_offline_image}
-        docker save goodrain.me/${rbd_offline_image} -o ./offline/rbd_image/${rbd_image_tar}.tgz
+        docker pull "${images}" || exit 1
+        docker tag "${images}" goodrain.me/"${rbd_offline_image}"
+        docker save goodrain.me/"${rbd_offline_image}" -o ./offline/rbd_image/"${rbd_image_tar}".tgz
     done
 }
 
@@ -105,7 +110,7 @@ function main() {
     
     get_rbd_images
 
-    tar zcvf rainbond-offline-$VERSION.tgz offline/*
+    tar zcvf rainbond-offline-"$VERSION".tgz offline/*
 
 }
 

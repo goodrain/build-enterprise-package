@@ -1,4 +1,4 @@
-name: build-release-offlice-package
+name: push-enterprise-package
 
 on:
   workflow_dispatch:

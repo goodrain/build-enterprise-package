@@ -12,7 +12,7 @@ jobs:
         env:
           VERSION: ${{ vars.VERSION }}
           DOMESTIC_DOCKER_USERNAME: ${{ vars.DOMESTIC_DOCKER_USERNAME }}
-          DOMESTIC_DOCKER_PASSWORD: ${{ vars.DOMESTIC_DOCKER_PASSWORD }}
+          DOMESTIC_DOCKER_PASSWORD: ${{ secrets.DOMESTIC_DOCKER_PASSWORD }}
         run: chmod +x ./enterprise_offline_package.sh && ./enterprise_offline_package.sh
         
       - name: Setup aliyun oss

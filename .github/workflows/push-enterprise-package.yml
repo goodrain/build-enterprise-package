@@ -1,7 +1,9 @@
 name: push-enterprise-package
 
 on:
-  workflow_dispatch:
+  repository_dispatch:
+    types:
+      - enterprise
 
 jobs:
   build:
@@ -10,7 +12,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Pack offline packages
         env:
-          VERSION: ${{ vars.VERSION }}
+          VERSION: ${{ github.event.client_payload.version }}
           DOMESTIC_DOCKER_USERNAME: ${{ vars.DOMESTIC_DOCKER_USERNAME }}
           DOMESTIC_DOCKER_PASSWORD: ${{ secrets.DOMESTIC_DOCKER_PASSWORD }}
         run: chmod +x ./enterprise_offline_package.sh && ./enterprise_offline_package.sh

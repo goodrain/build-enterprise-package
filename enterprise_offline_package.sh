@@ -29,6 +29,8 @@ function download_offline_package () {
     chmod +x ./offline/rke
     
     wget https://pkg.rainbond.com/offline/os-kernel/kernel_upgrade.tgz -O ./offline/kernel_upgrade.tgz
+
+    git clone --depth=1 https://github.com/goodrain/rainbond-chart.git ./offline/rainbond-chart
 }
 
 function get_k8s_images() {

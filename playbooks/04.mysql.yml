@@ -1,0 +1,79 @@
+- name: 部署 MySQL 主服务
+  hosts: mysql_master
+  become: true
+  tasks:
+  - name: 创建 MySQL 数据目录
+    ansible.builtin.file:
+      path: /opt/mysql/data
+      state: directory
+      mode: '0777'
+
+  - name: 启动 MySQL 主节点
+    ansible.builtin.shell: >
+      docker run --name mysql-master --restart=always \
+      -p 3306:3306 \
+      -v /opt/mysql/data:/bitnami/mysql/data \
+      -e MYSQL_ROOT_PASSWORD=Root123456 \
+      -e MYSQL_REPLICATION_MODE=master \
+      -e MYSQL_REPLICATION_USER=repl_user \
+      -e MYSQL_REPLICATION_PASSWORD=repl_password \
+      -e MYSQL_AUTHENTICATION_PLUGIN=mysql_native_password \
+      -d bitnami/mysql:8.0.34
+
+  - name: 等待 MySQL 主节点启动
+    ansible.builtin.wait_for:
+      host: "{{ hostvars[groups['mysql_master'][0]]['ansible_host'] | default(groups['mysql_master'][0]) }}"
+      port: 3306
+      delay: 10
+      timeout: 300
+      state: started
+
+  - name: 创建数据库
+    ansible.builtin.shell: docker exec -it mysql-master mysql -uroot -pRoot123456 -e "create database console; create database region;"
+    args:
+      executable: /bin/bash
+
+- name: 部署 MySQL 从服务
+  hosts: mysql_slave
+  become: true
+  tasks:
+  - name: 创建 MySQL 数据目录
+    ansible.builtin.file:
+      path: /opt/mysql/data
+      state: directory
+      mode: '0777'
+
+  - name: 启动 MySQL 从节点
+    ansible.builtin.shell: >
+      docker run --name mysql-slave --restart=always \
+      -p 3306:3306 \
+      -v /opt/mysql/data:/bitnami/mysql/data \
+      -e MYSQL_MASTER_HOST="{{ hostvars[groups['mysql_master'][0]]['ansible_host'] | default(groups['mysql_master'][0]) }}" \
+      -e MYSQL_MASTER_ROOT_PASSWORD=Root123456 \
+      -e MYSQL_MASTER_PORT_NUMBER=3306 \
+      -e MYSQL_REPLICATION_MODE=slave \
+      -e MYSQL_REPLICATION_USER=repl_user \
+      -e MYSQL_REPLICATION_PASSWORD=repl_password \
+      -e MYSQL_AUTHENTICATION_PLUGIN=mysql_native_password \
+      -d bitnami/mysql:8.0.34
+
+  - name: 等待 MySQL 从节点启动
+    ansible.builtin.wait_for:
+      host: "{{ hostvars[groups['mysql_slave'][0]]['ansible_host'] | default(groups['mysql_slave'][0]) }}"
+      port: 3306
+      delay: 10
+      timeout: 300
+      state: started
+  
+  - name: 检查主从同步状态
+    ansible.builtin.shell: docker exec -it mysql-slave mysql -uroot -pRoot123456 -e "show slave status \G"
+    args:
+      executable: /bin/bash
+    register: mysql_slave_status
+  
+  - name: 从节点同步状态查询
+    ansible.builtin.debug:
+      msg: "MySQL 从节点同步状态正常"
+    when:
+    - "mysql_slave_status.stdout_lines is search('Slave_IO_Running: Yes')"
+    - "mysql_slave_status.stdout_lines is search('Slave_SQL_Running: Yes')"

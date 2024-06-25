@@ -1,0 +1,57 @@
+name: yanxiang-region-V6-amd64
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'branch'
+        required: true
+        default: 'yanxiang-new'
+      version:
+        description: 'version'
+        default: 'yanxiang-new'
+        required: true
+
+env:
+  VERSION: ${{ github.event.inputs.version }}
+  DOMESTIC_DOCKER_USERNAME: zhangq@goodrain
+  DOMESTIC_DOCKER_PASSWORD: ${{ secrets.DOMESTIC_DOCKER_PASSWORD }}
+  DOMESTIC_BASE_NAME: registry.ap-southeast-1.aliyuncs.com
+  DOMESTIC_NAMESPACE: goodrain-ee
+  BUILD_ARCH: amd64
+  GIT_REPO: ${{ secrets.GIT_REPO }}
+  
+jobs:
+  build-rainbond-region:
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        component: [api, chaos, mq, webcli, worker, eventlog, init-probe, mesh-data-panel, resource-proxy]
+    steps:
+      - name: Pull code and Build the Docker image
+        env:
+          DISABLE_GOPROXY: true
+        run: |
+          git clone -b ${{ github.event.inputs.branch }} --depth=1 $GIT_REPO/goodrain/rainbond.git && cd rainbond
+          chmod +x ./release.sh
+          ./release.sh ${{ matrix.component }} push
+
+  build-rainbond-region-grctl-shell:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Pull code and Build the Docker image
+        env:
+          DISABLE_GOPROXY: true
+        run: |
+          git clone -b ${{ github.event.inputs.branch }} --depth=1 $GIT_REPO/goodrain/rainbond.git && cd rainbond
+          chmod +x ./release.sh
+          ./release.sh grctl push
+          ./release.sh shell push
+
+  build-operator:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Build and push
+        run: |
+          git clone -b yanxiang-new --depth=1 https://github.com/goodrain/rainbond-operator.git && cd rainbond-operator
+          chmod +x ./release.sh
+          ./release.sh

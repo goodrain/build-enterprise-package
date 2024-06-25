@@ -1,0 +1,49 @@
+name: push-enterprise-package
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'version'
+        required: true
+        default: 'enterprise-2309'
+      os:
+        description: 'os'
+        required: false
+        default: 'ubuntu-22.04'
+        type: choice
+        options:
+        - ubuntu-22.04
+        - self-hosted
+
+env:
+  VERSION: ${{ github.event.inputs.version }}
+
+jobs:
+  build:
+    runs-on: ${{ github.event.inputs.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Pack offline packages
+        env:
+          DOMESTIC_DOCKER_USERNAME: ${{ vars.DOMESTIC_DOCKER_USERNAME }}
+          DOMESTIC_DOCKER_PASSWORD: ${{ secrets.DOMESTIC_DOCKER_PASSWORD }}
+        run: chmod +x ./enterprise_offline_package.sh && ./enterprise_offline_package.sh
+          
+      - name:  Push to OSS
+        env:
+          AKI: ${{ secrets.OSS_ACCESS_KEY_ID }}
+          AKS: ${{ secrets.OSS_ACCESS_KEY_SECRET }}
+          OS_ARCH: ${{ github.event.inputs.os }}
+        run: |
+          if [ $OS_ARCH == "self-hosted" ]; then
+            wget https://gosspublic.alicdn.com/ossutil/1.7.11/ossutilarm64 && chmod +x ossutilarm64
+            ./ossutilarm64 config -e oss-cn-shanghai.aliyuncs.com -i $AKI -k $AKS
+            ./ossutilarm64 cp -rf rainbond-offline-*.tgz oss://rainbond-pkg/offline/5.3-enterprise/
+          else
+            wget https://gosspublic.alicdn.com/ossutil/1.7.11/ossutil64 && chmod +x ossutil64
+            ./ossutil64 config -e oss-cn-shanghai.aliyuncs.com -i $AKI -k $AKS
+            ./ossutil64 cp -rf rainbond-offline-*.tgz oss://rainbond-pkg/offline/5.3-enterprise/
+          fi
+          
+          

@@ -1,0 +1,14 @@
+
+- hosts:
+  - ssh
+  become: true
+  tasks:
+  # - import_tasks: 01.prepare.yml
+  # - import_tasks: 02.docker.yml
+  # - import_tasks: 03.images.yml
+
+- hosts:
+  - mysql
+  become: true
+  tasks:
+  - import_tasks: 04.mysql.yml

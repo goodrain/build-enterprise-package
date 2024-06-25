@@ -1,0 +1,23 @@
+[controlplane]
+39.104.27.24 ansible_ssh_user="root" ansible_ssh_pass="admin@123"
+39.104.27.26
+
+[etcd]
+39.104.27.24 ansible_ssh_user="root" ansible_ssh_pass="admin@123"
+39.104.27.26
+
+[worker]
+39.104.27.24 ansible_ssh_user="root" ansible_ssh_pass="admin@123"
+39.104.27.25 ansible_ssh_user="root" ansible_ssh_pass="admin@123"
+39.104.27.26
+
+
+[mysql_master]
+39.104.27.24 ansible_ssh_user="root" ansible_ssh_pass="admin@123"
+
+[mysql_slave]
+#39.104.27.24 ansible_ssh_user="root" ansible_ssh_pass="admin@123"
+
+[all:vars]
+# 可选离线安装系统软件包 (offline|online)
+INSTALL_MODE=offline

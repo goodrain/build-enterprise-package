@@ -1,0 +1,39 @@
+- hosts: all
+  become: true
+  tasks:
+
+  - name: 检查 Docker 服务是否已安装
+    ansible.builtin.service:
+      name: docker
+    register: docker_service
+
+  - name: 已安装 Docker 服务提示
+    ansible.builtin.debug:
+      msg: "Docker 服务已安装"
+    when: docker_service.status.ActiveState == 'active'
+
+  - name: 在线安装 Docker
+    ansible.builtin.shell: >
+      curl -sfL https://get.rainbond.com/install_docker | bash
+    when:
+    - INSTALL_MODE == 'online'
+    - docker_service.status.ActiveState == 'inactive'
+
+  - name: 离线安装 Docker
+    ansible.builtin.shell: >
+      bash /opt/rainbond_install/offline/install_docker_offline.sh
+    when:
+    - INSTALL_MODE == 'offline'
+    - docker_service.status.ActiveState == 'inactive'
+
+  - ansible.builtin.service:
+      name: docker
+    register: docker_service
+    until: docker_service.status.ActiveState == 'active'
+    retries: 10
+    delay: 30
+
+  - name: 检查 Docker 服务安装是否成功
+  - ansible.builtin.debug:
+      msg: "Docker 服务安装成功"
+    when: docker_service.status.ActiveState == 'active'

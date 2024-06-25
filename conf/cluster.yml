@@ -1,0 +1,249 @@
+# config.yaml.j2
+nodes:
+- address: 39.104.27.24
+  port: "22"
+  internal_address: 39.104.27.24
+  role:
+  - controlplane
+  - etcd
+  - worker
+  hostname_override: ""
+  user: docker
+  docker_socket: ""
+  ssh_key: ""
+  ssh_key_path: ~/.ssh/id_rsa
+  ssh_cert: ""
+  ssh_cert_path: ""
+  labels: {}
+  taints: []
+- address: 39.104.27.26
+  port: "22"
+  internal_address: 39.104.27.26
+  role:
+  - controlplane
+  - etcd
+  - worker
+  hostname_override: ""
+  user: docker
+  docker_socket: ""
+  ssh_key: ""
+  ssh_key_path: ~/.ssh/id_rsa
+  ssh_cert: ""
+  ssh_cert_path: ""
+  labels: {}
+  taints: []
+- address: 39.104.27.25
+  port: "22"
+  internal_address: 39.104.27.25
+  role:
+  - worker
+  hostname_override: ""
+  user: docker
+  docker_socket: ""
+  ssh_key: ""
+  ssh_key_path: ~/.ssh/id_rsa
+  ssh_cert: ""
+  ssh_cert_path: ""
+  labels: {}
+  taints: []
+services:
+  etcd:
+    image: ""
+    extra_args: {}
+    extra_args_array: {}
+    extra_binds: []
+    extra_env:
+    - ETCD_AUTO_COMPACTION_RETENTION=1
+    win_extra_args: {}
+    win_extra_args_array: {}
+    win_extra_binds: []
+    win_extra_env: []
+    external_urls: []
+    ca_cert: ""
+    cert: ""
+    key: ""
+    path: ""
+    uid: 0
+    gid: 0
+    snapshot: null
+    retention: ""
+    creation: ""
+    backup_config: null
+  kube-api:
+    image: ""
+    extra_args: {}
+    extra_args_array: {}
+    extra_binds: []
+    extra_env: []
+    win_extra_args: {}
+    win_extra_args_array: {}
+    win_extra_binds: []
+    win_extra_env: []
+    service_cluster_ip_range: 10.43.0.0/16
+    service_node_port_range: ""
+    pod_security_policy: false
+    always_pull_images: false
+    secrets_encryption_config: null
+    audit_log: null
+    admission_configuration: null
+    event_rate_limit: null
+  kube-controller:
+    image: ""
+    extra_args: {}
+    extra_args_array: {}
+    extra_binds: []
+    extra_env: []
+    win_extra_args: {}
+    win_extra_args_array: {}
+    win_extra_binds: []
+    win_extra_env: []
+    cluster_cidr: 10.42.0.0/16
+    service_cluster_ip_range: 10.43.0.0/16
+  scheduler:
+    image: ""
+    extra_args: {}
+    extra_args_array: {}
+    extra_binds: []
+    extra_env: []
+    win_extra_args: {}
+    win_extra_args_array: {}
+    win_extra_binds: []
+    win_extra_env: []
+  kubelet:
+    image: ""
+    extra_args: {}
+    extra_args_array: {}
+    extra_binds:
+    - /grlocaldata:/grlocaldata:rw,z
+    - /cache:/cache:rw,z
+    extra_env: []
+    win_extra_args: {}
+    win_extra_args_array: {}
+    win_extra_binds: []
+    win_extra_env: []
+    cluster_domain: cluster.local
+    infra_container_image: ""
+    cluster_dns_server: 10.43.0.10
+    fail_swap_on: false
+    generate_serving_certificate: false
+  kubeproxy:
+    image: ""
+    extra_args: {}
+    extra_args_array: {}
+    extra_binds: []
+    extra_env: []
+    win_extra_args: {}
+    win_extra_args_array: {}
+    win_extra_binds: []
+    win_extra_env: []
+network:
+  plugin: flannel # calico
+  options: {}
+  mtu: 0
+  node_selector: {}
+  update_strategy: null
+  tolerations: []
+authentication:
+  strategy: x509
+  sans: []
+  webhook: null
+addons: ""
+addons_include: []
+system_images:
+  etcd: goodrain.me/mirrored-coreos-etcd:v3.5.3
+  alpine: goodrain.me/rke-tools:v0.1.87
+  nginx_proxy: goodrain.me/rke-tools:v0.1.87
+  cert_downloader: goodrain.me/rke-tools:v0.1.87
+  kubernetes_services_sidecar: goodrain.me/rke-tools:v0.1.87
+  kubedns: goodrain.me/mirrored-k8s-dns-kube-dns:1.21.1
+  dnsmasq: goodrain.me/mirrored-k8s-dns-dnsmasq-nanny:1.21.1
+  kubedns_sidecar: goodrain.me/mirrored-k8s-dns-sidecar:1.21.1
+  kubedns_autoscaler: goodrain.me/cluster-proportional-autoscaler:1.8.1
+  coredns: goodrain.me/mirrored-coredns-coredns:1.10.1
+  coredns_autoscaler: goodrain.me/cluster-proportional-autoscaler:1.8.1
+  nodelocal: goodrain.me/mirrored-k8s-dns-node-cache:1.21.1
+  kubernetes: goodrain.me/hyperkube:v1.23.10-rancher1
+  flannel: goodrain.me/mirrored-coreos-flannel:v0.15.1
+  flannel_cni: goodrain.me/flannel-cni:v0.3.0-rancher6
+  calico_node: goodrain.me/mirrored-calico-node:v3.22.0
+  calico_cni: goodrain.me/calico-cni:v3.22.0-rancher1
+  calico_controllers: goodrain.me/mirrored-calico-kube-controllers:v3.22.0
+  calico_ctl: goodrain.me/mirrored-calico-ctl:v3.22.0
+  calico_flexvol: goodrain.me/mirrored-calico-pod2daemon-flexvol:v3.22.0
+  canal_node: goodrain.me/mirrored-calico-node:v3.22.0
+  canal_cni: ""
+  canal_controllers: ""
+  canal_flannel: ""
+  canal_flexvol: ""
+  weave_node: ""
+  weave_cni: ""
+  pod_infra_container: goodrain.me/mirrored-pause:3.6
+  ingress: ""
+  ingress_backend: ""
+  ingress_webhook: ""
+  metrics_server: goodrain.me/mirrored-metrics-server:v0.6.1
+  windows_pod_infra_container: ""
+  aci_cni_deploy_container: ""
+  aci_host_container: ""
+  aci_opflex_container: ""
+  aci_mcast_container: ""
+  aci_ovs_container: ""
+  aci_controller_container: ""
+  aci_gbp_server_container: ""
+  aci_opflex_server_container: ""
+ssh_key_path: ""
+ssh_cert_path: ""
+ssh_agent_auth: false
+authorization:
+  mode: rbac
+  options: {}
+ignore_docker_version: null
+enable_cri_dockerd: null
+kubernetes_version: ""
+private_registries: []
+ingress:
+  provider: none
+  options: {}
+  node_selector: {}
+  extra_args: {}
+  dns_policy: ""
+  extra_envs: []
+  extra_volumes: []
+  extra_volume_mounts: []
+  update_strategy: null
+  http_port: 0
+  https_port: 0
+  network_mode: ""
+  tolerations: []
+  default_backend: null
+  default_http_backend_priority_class_name: ""
+  nginx_ingress_controller_priority_class_name: ""
+  default_ingress_class: null
+cluster_name: ""
+cloud_provider:
+  name: ""
+prefix_path: ""
+win_prefix_path: ""
+addon_job_timeout: 300
+bastion_host:
+  address: ""
+  port: ""
+  user: ""
+  ssh_key: ""
+  ssh_key_path: ""
+  ssh_cert: ""
+  ssh_cert_path: ""
+  ignore_proxy_env_vars: false
+monitoring:
+  provider: none
+  options: {}
+  node_selector: {}
+  update_strategy: null
+  replicas: null
+  tolerations: []
+  metrics_server_priority_class_name: ""
+restore:
+  restore: false
+  snapshot_name: ""
+rotate_encryption_key: false
+dns: null

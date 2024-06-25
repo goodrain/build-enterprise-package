@@ -1,0 +1,79 @@
+name: standard-V5-amd64
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'branch'
+        required: true
+        default: 'enterprise-2306'
+      version:
+        description: 'version'
+        default: 'enterprise-2306'
+        required: true
+  
+env:
+  VERSION: ${{ github.event.inputs.version }}
+  DOMESTIC_DOCKER_USERNAME: zhangq@goodrain
+  DOMESTIC_DOCKER_PASSWORD: ${{ secrets.DOMESTIC_DOCKER_PASSWORD }}
+  DOMESTIC_BASE_NAME: registry.ap-southeast-1.aliyuncs.com
+  DOMESTIC_NAMESPACE: goodrain-ee
+  BUILD_ARCH: amd64
+  GIT_REPO: ${{ secrets.GIT_REPO }}
+  
+jobs:
+  build-allinone:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Build the Docker image
+        env:
+          BUILD_RBD_APP_UI: false
+          ALLINONE: true
+          ROUTE_MODE: history
+        run: |
+          git clone -b ${{ github.event.inputs.branch }} --depth=1 $GIT_REPO/goodrain/rainbond-ui-cloud.git && cd rainbond-ui-cloud
+          chmod +x ./build.sh && ./build.sh
+          docker build -t rainbond/rainbond-ui:$VERSION .
+
+      - name: Pull code and Build allinone image
+        env:
+          TRAVIS_PULL_REQUEST: false
+          ADAPTOR_BRANCH: enterprise-2023
+        run: |
+          git clone -b ${{ github.event.inputs.branch }} --depth=1 $GIT_REPO/goodrain/rainbond-console-cloud.git && cd rainbond-console-cloud
+          chmod +x ./release.sh
+          ./release.sh allinone
+
+  build-rainbond-region:
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        component: [api, chaos, gateway, monitor, mq, webcli, worker, eventlog, init-probe, mesh-data-panel, node, resource-proxy]
+    steps:
+      - name: Pull code and Build the Docker image
+        env:
+          DISABLE_GOPROXY: true
+        run: |
+          git clone -b ${{ github.event.inputs.branch }} --depth=1 $GIT_REPO/goodrain/rainbond.git && cd rainbond
+          chmod +x ./release.sh
+          ./release.sh ${{ matrix.component }} push
+
+  build-rainbond-region-grctl-shell:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Pull code and Build the Docker image
+        env:
+          DISABLE_GOPROXY: true
+        run: |
+          git clone -b ${{ github.event.inputs.branch }} --depth=1 $GIT_REPO/goodrain/rainbond.git && cd rainbond
+          chmod +x ./release.sh
+          ./release.sh grctl push
+          ./release.sh shell push
+
+  build-operator:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Build and push
+        run: |
+          git clone -b main --depth=1 https://github.com/goodrain/rainbond-operator.git && cd rainbond-operator
+          chmod +x ./release.sh
+          ./release.sh

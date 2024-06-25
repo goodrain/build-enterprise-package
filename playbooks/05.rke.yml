@@ -1,0 +1,16 @@
+- name: 安装 Kubernetes 集群
+  hosts: localhost
+  gather_facts: no
+  tasks:
+
+  - name: 生成 cluster.yml 在线集群安装配置文件
+    ansible.builtin.template:
+      src: template/online.cluster.yml.j2
+      dest: /opt/rainbond_install/cluster/online/cluster.yml
+    when: INSTALL_MODE == 'online'
+
+  - name: 生成 cluster.yml 离线集群安装配置文件
+    ansible.builtin.template:
+      src: template/offline.cluster.yml.j2
+      dest: /opt/rainbond_install/cluster/offline/cluster.yml
+    when: INSTALL_MODE == 'offline'

@@ -1,0 +1,31 @@
+- hosts: all
+  become: true
+  tasks:
+
+  - name: 查找 Kubernetes 镜像文件
+    ansible.builtin.shell: ls /opt/rainbond_install/offline/k8s_image/*.tgz
+    register: k8s_tgz_files
+    args:
+      executable: /bin/bash
+    when:
+    - INSTALL_MODE == 'offline'
+
+  - name: 导入 Kubernetes 离线镜像
+    ansible.builtin.shell: docker load -i {{ item }}
+    loop: "{{ k8s_tgz_files.stdout_lines }}"
+    when:
+    - INSTALL_MODE == 'offline'
+
+  - name: 查找 Rainbond 镜像文件
+    ansible.builtin.shell: ls /opt/rainbond_install/offline/rbd_image/*.tgz
+    register: rbd_tgz_files
+    args:
+      executable: /bin/bash
+    when:
+    - INSTALL_MODE == 'offline'
+
+  - name: 导入 Rainbond 离线镜像
+    ansible.builtin.shell: docker load -i {{ item }}
+    loop: "{{ rbd_tgz_files.stdout_lines }}"
+    when:
+    - INSTALL_MODE == 'offline'

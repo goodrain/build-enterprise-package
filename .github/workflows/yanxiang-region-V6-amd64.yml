@@ -45,7 +45,6 @@ jobs:
           git clone -b ${{ github.event.inputs.branch }} --depth=1 $GIT_REPO/goodrain/rainbond.git && cd rainbond
           chmod +x ./release.sh
           ./release.sh grctl push
-          ./release.sh shell push
 
   build-operator:
     runs-on: ubuntu-22.04

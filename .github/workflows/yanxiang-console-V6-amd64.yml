@@ -39,17 +39,6 @@ jobs:
   build-allinone:
     runs-on: ubuntu-22.04
     steps:
-      - name: Build the Docker image
-        env:
-          BUILD_RBD_APP_UI: false
-          ALLINONE: true
-          ROUTE_MODE: history
-          VERSION: ${{ github.event.inputs.version }}
-        run: |
-          git clone -b ${{ github.event.inputs.branch }} --depth=1 $GIT_REPO/goodrain/rainbond-ui-cloud.git && cd rainbond-ui-cloud
-          chmod +x ./build.sh && ./build.sh
-          docker build -t rainbond/rainbond-ui:$VERSION .
-
       - name: Pull code and Build allinone image
         env:
           TRAVIS_PULL_REQUEST: false

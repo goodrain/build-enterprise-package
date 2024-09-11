@@ -30,11 +30,11 @@ jobs:
         run: |
           git clone -b ${{ github.event.inputs.branch }} --depth=1 $GIT_REPO/goodrain/rainbond-ui-cloud.git && cd rainbond-ui-cloud
           chmod +x ./build.sh && ./build.sh
-          docker build -f build/Dockerfile.nginx -t registry.ap-southeast-1.aliyuncs.com/goodrain-ee/appstore-user-ui:$VERSION .
-          echo "$DOMESTIC_DOCKER_PASSWORD" | docker login -u zhangq@goodrain --password-stdin registry.ap-southeast-1.aliyuncs.com
-          docker push registry.ap-southeast-1.aliyuncs.com/goodrain-ee/appstore-user-ui:$VERSION
-          docker tag registry.ap-southeast-1.aliyuncs.com/goodrain-ee/appstore-user-ui:$VERSION registry.ap-southeast-1.aliyuncs.com/goodrain-ee/appstore-admin-ui:$VERSION
-          docker push registry.ap-southeast-1.aliyuncs.com/goodrain-ee/appstore-admin-ui:$VERSION
+          docker build -f build/Dockerfile.nginx -t registry.cn-hangzhou.aliyuncs.com/goodrain/appstore-user-ui:$VERSION .
+          echo "$DOMESTIC_DOCKER_PASSWORD" | docker login -u zhangq@goodrain --password-stdin registry.cn-hangzhou.aliyuncs.com
+          docker push registry.cn-hangzhou.aliyuncs.com/goodrain/appstore-user-ui:$VERSION
+          docker tag registry.cn-hangzhou.aliyuncs.com/goodrain/appstore-user-ui:$VERSION registry.cn-hangzhou.aliyuncs.com/goodrain/appstore-admin-ui:$VERSION
+          docker push registry.cn-hangzhou.aliyuncs.com/goodrain/appstore-admin-ui:$VERSION
 
   build-allinone:
     runs-on: ubuntu-22.04

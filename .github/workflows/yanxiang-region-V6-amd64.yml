@@ -15,8 +15,8 @@ env:
   VERSION: ${{ github.event.inputs.version }}
   DOMESTIC_DOCKER_USERNAME: zhangq@goodrain
   DOMESTIC_DOCKER_PASSWORD: ${{ secrets.DOMESTIC_DOCKER_PASSWORD }}
-  DOMESTIC_BASE_NAME: registry.ap-southeast-1.aliyuncs.com
-  DOMESTIC_NAMESPACE: goodrain-ee
+  DOMESTIC_BASE_NAME: registry.cn-hangzhou.aliyuncs.com
+  DOMESTIC_NAMESPACE: goodrain
   BUILD_ARCH: amd64
   GIT_REPO: ${{ secrets.GIT_REPO }}
   

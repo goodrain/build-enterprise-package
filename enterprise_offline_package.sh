@@ -18,9 +18,9 @@ function download_offline_package () {
         wget https://pkg.goodrain.com/pkg/rke/v1.3.15/rke-arm -O ./offline/rke && chmod +x ./offline/rke
     fi
     
-    wget https://get.rainbond.com/install_docker_offline.sh -O ./offline/install_docker_offline.sh
-    wget https://get.rainbond.com/init_node_offline.sh -O ./offline/init_node_offline.sh
-    wget https://get.rainbond.com/linux-optimize.sh -O ./offline/linux-optimize.sh
+    wget https://get.rainbond.com/install_docker_offline.sh -O ./offline/install_docker_offline.sh && chmod +x ./offline/install_docker_offline.sh
+    wget https://get.rainbond.com/init_node_offline.sh -O ./offline/init_node_offline.sh && chmod +x ./offline/init_node_offline.sh
+    wget https://get.rainbond.com/linux-optimize.sh -O ./offline/linux-optimize.sh && chmod +x ./offline/linux-optimize.sh
     wget https://pkg.rainbond.com/offline/os-kernel/kernel_upgrade.tgz -O ./offline/kernel_upgrade.tgz
 
     git clone --depth=1 https://github.com/goodrain/rainbond-chart.git ./offline/rainbond-chart

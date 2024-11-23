@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DOCKER_OFFLINE_VERSION=20.10.9
+DOCKER_OFFLINE_VERSION=24.0.7
 
 function download_offline_package () {
     if [ $(arch) == "x86_64" ] || [ $(arch) == "amd64" ]; then

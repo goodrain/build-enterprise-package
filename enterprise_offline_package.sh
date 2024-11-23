@@ -23,7 +23,7 @@ function download_offline_package () {
     wget https://get.rainbond.com/linux-optimize.sh -O ./offline/linux-optimize.sh && chmod +x ./offline/linux-optimize.sh
     wget https://pkg.rainbond.com/offline/os-kernel/kernel_upgrade.tgz -O ./offline/kernel_upgrade.tgz
 
-    git clone --depth=1 https://github.com/goodrain/rainbond-chart.git ./offline/rainbond-chart
+    git clone --depth=1 -b V5.17 https://github.com/goodrain/rainbond-chart.git ./offline/rainbond-chart
 
     wget https://storageclass.oss-cn-shanghai.aliyuncs.com/goodrain/rainbond/nfs-client-provisioner-1.2.8.tgz -O ./offline/nfs-client-provisioner-1.2.8.tgz
 }

@@ -25,6 +25,30 @@ env:
   GIT_REPO: ${{ secrets.GIT_REPO }}
   
 jobs:
+  prepare-components:
+    runs-on: ubuntu-22.04-arm
+    outputs:
+      components: ${{ steps.normalize.outputs.components }}
+    steps:
+      - name: Normalize components input
+        id: normalize
+        env:
+          COMPONENTS: ${{ github.event.inputs.components }}
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+
+          raw = os.environ.get("COMPONENTS", "")
+          components = [item.strip() for item in raw.split(",") if item.strip()]
+
+          if not components:
+              raise SystemExit("No valid components were provided")
+
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as fh:
+              print(f"components={json.dumps(components, ensure_ascii=True)}", file=fh)
+          PY
+
   build-allinone:
     runs-on: ubuntu-22.04-arm
     steps:
@@ -48,10 +72,11 @@ jobs:
           ./release.sh allinone
 
   build-rainbond-region:
+    needs: prepare-components
     runs-on: ubuntu-22.04-arm
     strategy:
       matrix:
-        component: ${{ fromJSON(format('["{0}"]', replace(replace(inputs.components, ' ', ''), ',', '","'))) }}
+        component: ${{ fromJSON(needs.prepare-components.outputs.components) }}
     steps:
       - name: Pull code and Build the Docker image
         env:

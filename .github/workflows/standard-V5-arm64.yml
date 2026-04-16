@@ -47,7 +47,7 @@ jobs:
     runs-on: ubuntu-22.04-arm
     strategy:
       matrix:
-        component: [api, chaos, gateway, monitor, mq, webcli, worker, eventlog, init-probe, mesh-data-panel, node, resource-proxy]
+        component: [worker, api, chaos, gateway, monitor, mq, webcli, eventlog, init-probe, mesh-data-panel, node, resource-proxy]
     steps:
       - name: Pull code and Build the Docker image
         env:

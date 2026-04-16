@@ -10,6 +10,10 @@ on:
         description: 'version'
         default: 'enterprise-2306-arm64'
         required: true
+      components:
+        description: 'components, comma separated'
+        default: 'worker,api,chaos,gateway,monitor,mq,webcli,eventlog,init-probe,mesh-data-panel,node,resource-proxy'
+        required: true
   
 env:
   VERSION: ${{ github.event.inputs.version }}
@@ -47,7 +51,7 @@ jobs:
     runs-on: ubuntu-22.04-arm
     strategy:
       matrix:
-        component: [worker, api, chaos, gateway, monitor, mq, webcli, eventlog, init-probe, mesh-data-panel, node, resource-proxy]
+        component: component: ${{ fromJSON(format('["{0}"]', replace(inputs.components, ',', '","'))) }}
     steps:
       - name: Pull code and Build the Docker image
         env:
